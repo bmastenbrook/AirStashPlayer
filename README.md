@@ -1,4 +1,4 @@
-Android/iOS video player based on [ffmpeg 2.8](http://ffmpeg.org)
+Android/iOS video player based on [FFmpeg 2.8](http://ffmpeg.org)
 
 ### Setup
 ```
@@ -9,17 +9,21 @@ brew install yasm
 # add these lines to your ~/.bash_profile or ~/.profile
 # export ANDROID_SDK=<your sdk path>
 # export ANDROID_NDK=<your ndk path>
+```
 
 ### Build
-# Android
+
+#### Android
+
 ```
 cd android
 ./make-all.sh
 ```
 
-# iOS
+#### iOS
 ```
 cd ios
 ./compile-ffmpeg.sh all
 ```
 
+There are sample Android Studio and Xcode projects that can be used as a starting point for a new video player.
