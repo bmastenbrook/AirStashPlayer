@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "a5155eff-8974-c1ad-17c3-8ff5bc833747++2475",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "a5155eff-8974-c1ad-17c3-8ff5bc833747++2475" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "a5155eff-8974-c1ad-17c3-8ff5bc833747++2475" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "AF2EAD4E-B2A2-447C-84CF-E75D29BA5AAB",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "a5155eff-8974-c1ad-17c3-8ff5bc833747++2475" : "AirStashPlayer\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "AirStashMediaPlayer",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ios\/AirStashMediaPlayer\/AirStashMediaPlayer.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "svn+ssh:\/\/atlas.wearable.com\/svn\/apps",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "a5155eff-8974-c1ad-17c3-8ff5bc833747++2475"
+    }
+  ]
+}

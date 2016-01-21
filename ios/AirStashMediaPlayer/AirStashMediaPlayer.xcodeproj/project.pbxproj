@@ -1,0 +1,966 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		554867981C3F0F0000D64B24 /* AirStashVideoToolBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 554867911C3F0F0000D64B24 /* AirStashVideoToolBox.h */; };
+		554867991C3F0F0000D64B24 /* AirStashVideoToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 554867921C3F0F0000D64B24 /* AirStashVideoToolBox.m */; };
+		5548679A1C3F0F0000D64B24 /* ffpipeline_ios.c in Sources */ = {isa = PBXBuildFile; fileRef = 554867931C3F0F0000D64B24 /* ffpipeline_ios.c */; };
+		5548679B1C3F0F0000D64B24 /* ffpipeline_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 554867941C3F0F0000D64B24 /* ffpipeline_ios.h */; };
+		5548679C1C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.h in Headers */ = {isa = PBXBuildFile; fileRef = 554867951C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.h */; };
+		5548679D1C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.m in Sources */ = {isa = PBXBuildFile; fileRef = 554867961C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.m */; };
+		5548679E1C3F0F0000D64B24 /* h264_sps_parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 554867971C3F0F0000D64B24 /* h264_sps_parser.h */; };
+		E607FFE11B7B62E3005F11A6 /* AirStashDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E607FFDF1B7B60F9005F11A6 /* AirStashDeviceModel.m */; };
+		E653C6F61BCE5A750016835A /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653C6EF1BCE5A750016835A /* libavcodec.a */; };
+		E653C6F81BCE5A750016835A /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653C6F01BCE5A750016835A /* libavfilter.a */; };
+		E653C6FA1BCE5A750016835A /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653C6F11BCE5A750016835A /* libavformat.a */; };
+		E653C6FC1BCE5A750016835A /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653C6F21BCE5A750016835A /* libavutil.a */; };
+		E653C6FE1BCE5A750016835A /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653C6F31BCE5A750016835A /* libswresample.a */; };
+		E653C7001BCE5A750016835A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653C6F41BCE5A750016835A /* libswscale.a */; };
+		E654EA8F1B6B27E600B0F2D0 /* AirStashMediaFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = E654EA8E1B6B27E600B0F2D0 /* AirStashMediaFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E654EAA31B6B283700B0F2D0 /* AirStashAudioKit.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92A2187810C5009EAB56 /* AirStashAudioKit.m */; };
+		E654EAA41B6B283700B0F2D0 /* AirStashMediaModule.m in Sources */ = {isa = PBXBuildFile; fileRef = E672D6F218D3445100C51FF9 /* AirStashMediaModule.m */; };
+		E654EAA51B6B283700B0F2D0 /* AirStashMediaPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = E6F727C117F7C9B90043623F /* AirStashMediaPlayback.m */; };
+		E654EAA61B6B283700B0F2D0 /* AirStashMediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E6716E4A1807E5FC00B3FBC1 /* AirStashMediaUtils.m */; };
+		E654EAA71B6B283700B0F2D0 /* AirStashKVOController.m in Sources */ = {isa = PBXBuildFile; fileRef = E65DC3B819D93D5F004F8A08 /* AirStashKVOController.m */; };
+		E654EAA81B6B283D00B0F2D0 /* AirStashAVPlayerLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = E67C4E0419D15B3200415CEE /* AirStashAVPlayerLayerView.m */; };
+		E654EAA91B6B283D00B0F2D0 /* AirStashAVMoviePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E67C4E0719D15EEA00415CEE /* AirStashAVMoviePlayerController.m */; };
+		E654EAAA1B6B284300B0F2D0 /* AirStashMPMoviePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F8DC017EEC65200354D80 /* AirStashMPMoviePlayerController.m */; };
+		E654EAAB1B6B284C00B0F2D0 /* AirStashFFMoviePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F8DE617EFD9C300354D80 /* AirStashFFMoviePlayerController.m */; };
+		E654EAAC1B6B284C00B0F2D0 /* AirStashFFMoviePlayerDef.m in Sources */ = {isa = PBXBuildFile; fileRef = E6F727BA17F2D9D30043623F /* AirStashFFMoviePlayerDef.m */; };
+		E654EAAE1B6B284C00B0F2D0 /* AirStashFFOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = E62139BD180FA89A00553533 /* AirStashFFOptions.m */; };
+		E654EAAF1B6B285900B0F2D0 /* ff_cmdutils.c in Sources */ = {isa = PBXBuildFile; fileRef = E6903FD517EAFC6100CFD954 /* ff_cmdutils.c */; };
+		E654EAB01B6B285900B0F2D0 /* ff_ffpipeline.c in Sources */ = {isa = PBXBuildFile; fileRef = E67B91AB1A3801DB00717EA9 /* ff_ffpipeline.c */; };
+		E654EAB11B6B285900B0F2D0 /* ff_ffpipenode.c in Sources */ = {isa = PBXBuildFile; fileRef = E67B91AD1A3801DB00717EA9 /* ff_ffpipenode.c */; };
+		E654EAB21B6B285900B0F2D0 /* ff_ffplay.c in Sources */ = {isa = PBXBuildFile; fileRef = E6903FDB17EAFC6100CFD954 /* ff_ffplay.c */; };
+		E654EAB31B6B285900B0F2D0 /* meta.c in Sources */ = {isa = PBXBuildFile; fileRef = E6FAD9551A515CE300725002 /* meta.c */; };
+		E654EAB41B6B285900B0F2D0 /* player.c in Sources */ = {isa = PBXBuildFile; fileRef = E66F8DEF17EFEA9400354D80 /* player.c */; };
+		E654EAB91B6B286700B0F2D0 /* player_ios.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F8E0117EFEEA400354D80 /* player_ios.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E654EABA1B6B286B00B0F2D0 /* ffpipeline_ffplay.c in Sources */ = {isa = PBXBuildFile; fileRef = E67B91B21A3801E600717EA9 /* ffpipeline_ffplay.c */; };
+		E654EABB1B6B286B00B0F2D0 /* ffpipenode_ffplay_vdec.c in Sources */ = {isa = PBXBuildFile; fileRef = E67B91B41A3801E600717EA9 /* ffpipenode_ffplay_vdec.c */; };
+		E654EABD1B6B287000B0F2D0 /* sdl_vout_dummy.c in Sources */ = {isa = PBXBuildFile; fileRef = E63FC27417F013DE003551EB /* sdl_vout_dummy.c */; };
+		E654EABE1B6B287400B0F2D0 /* image_convert.c in Sources */ = {isa = PBXBuildFile; fileRef = E6903FF117EAFC6100CFD954 /* image_convert.c */; };
+		E654EABF1B6B287600B0F2D0 /* sdl_vout_overlay_ffmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = E6903FFB17EAFC6100CFD954 /* sdl_vout_overlay_ffmpeg.c */; };
+		E654EAC01B6B287E00B0F2D0 /* sdl_aout.c in Sources */ = {isa = PBXBuildFile; fileRef = E6903FFF17EAFC6100CFD954 /* sdl_aout.c */; };
+		E654EAC11B6B287E00B0F2D0 /* sdl_audio.c in Sources */ = {isa = PBXBuildFile; fileRef = E63FC27017F01143003551EB /* sdl_audio.c */; };
+		E654EAC21B6B287E00B0F2D0 /* sdl_error.c in Sources */ = {isa = PBXBuildFile; fileRef = E690400417EAFC6100CFD954 /* sdl_error.c */; };
+		E654EAC31B6B287E00B0F2D0 /* sdl_mutex.c in Sources */ = {isa = PBXBuildFile; fileRef = E690400817EAFC6100CFD954 /* sdl_mutex.c */; };
+		E654EAC41B6B287E00B0F2D0 /* sdl_stdinc.c in Sources */ = {isa = PBXBuildFile; fileRef = E690400A17EAFC6100CFD954 /* sdl_stdinc.c */; };
+		E654EAC51B6B287E00B0F2D0 /* sdl_thread.c in Sources */ = {isa = PBXBuildFile; fileRef = E690400C17EAFC6100CFD954 /* sdl_thread.c */; };
+		E654EAC61B6B287E00B0F2D0 /* sdl_timer.c in Sources */ = {isa = PBXBuildFile; fileRef = E690400E17EAFC6100CFD954 /* sdl_timer.c */; };
+		E654EAC71B6B287E00B0F2D0 /* sdl_vout.c in Sources */ = {isa = PBXBuildFile; fileRef = E690401117EAFC6100CFD954 /* sdl_vout.c */; };
+		E654EAC81B6B288A00B0F2D0 /* sdl_aout_ios_audiounit.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92A71878230C009EAB56 /* sdl_aout_ios_audiounit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E654EAC91B6B288A00B0F2D0 /* sdl_thread_ios.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92AA1878230C009EAB56 /* sdl_thread_ios.m */; };
+		E654EACA1B6B288A00B0F2D0 /* sdl_vout_ios_gles2.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92AC1878230C009EAB56 /* sdl_vout_ios_gles2.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E654EACB1B6B288A00B0F2D0 /* sdl_vout_overlay_videotoolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 45DB4AA81A5D52AE005CAD41 /* sdl_vout_overlay_videotoolbox.m */; };
+		E654EACC1B6B288A00B0F2D0 /* AirStashSDLAudioKit.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92C718782770009EAB56 /* AirStashSDLAudioKit.m */; };
+		E654EACD1B6B288A00B0F2D0 /* AirStashSDLAudioQueueController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92C11878236A009EAB56 /* AirStashSDLAudioQueueController.m */; };
+		E654EACE1B6B288A00B0F2D0 /* AirStashSDLAudioUnitController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92AE1878230C009EAB56 /* AirStashSDLAudioUnitController.m */; };
+		E654EACF1B6B288A00B0F2D0 /* AirStashSDLGLRenderI420.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92B11878230C009EAB56 /* AirStashSDLGLRenderI420.m */; };
+		E654EAD01B6B288A00B0F2D0 /* AirStashSDLGLRenderNV12.m in Sources */ = {isa = PBXBuildFile; fileRef = 451103121A5CE36A00337D24 /* AirStashSDLGLRenderNV12.m */; };
+		E654EAD11B6B288A00B0F2D0 /* AirStashSDLGLRenderRV24.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92B31878230C009EAB56 /* AirStashSDLGLRenderRV24.m */; };
+		E654EAD21B6B288A00B0F2D0 /* AirStashSDLGLShader.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92B51878230C009EAB56 /* AirStashSDLGLShader.m */; };
+		E654EAD31B6B288A00B0F2D0 /* AirStashSDLGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EE92B71878230C009EAB56 /* AirStashSDLGLView.m */; };
+		E654EAE61B6B295200B0F2D0 /* AirStashMediaModule.h in Headers */ = {isa = PBXBuildFile; fileRef = E672D6F118D3445100C51FF9 /* AirStashMediaModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E654EAE71B6B295200B0F2D0 /* AirStashMediaPlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = E6903EC117EAF6C500CFD954 /* AirStashMediaPlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E654EAE81B6B295200B0F2D0 /* AirStashAVMoviePlayerController.h in Headers */ = {isa = PBXBuildFile; fileRef = E67C4E0619D15EEA00415CEE /* AirStashAVMoviePlayerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E654EAE91B6B295200B0F2D0 /* AirStashMPMoviePlayerController.h in Headers */ = {isa = PBXBuildFile; fileRef = E66F8DBF17EEC65200354D80 /* AirStashMPMoviePlayerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E654EAEA1B6B295200B0F2D0 /* AirStashFFMoviePlayerController.h in Headers */ = {isa = PBXBuildFile; fileRef = E66F8DE517EFD9C300354D80 /* AirStashFFMoviePlayerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E654EAEC1B6B295200B0F2D0 /* AirStashFFOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E62139BC180FA89A00553533 /* AirStashFFOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E654EAED1B6B29C100B0F2D0 /* AirStashMediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = E66F8DC217EECB1E00354D80 /* AirStashMediaPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E67F82EB1C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.h in Headers */ = {isa = PBXBuildFile; fileRef = E67F82E91C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.h */; };
+		E67F82EC1C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.m in Sources */ = {isa = PBXBuildFile; fileRef = E67F82EA1C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.m */; };
+		E68B7AC51C1E7F20001DE241 /* AirStashSDLHudViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E68B7AC31C1E7F20001DE241 /* AirStashSDLHudViewController.h */; };
+		E68B7AC61C1E7F20001DE241 /* AirStashSDLHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E68B7AC41C1E7F20001DE241 /* AirStashSDLHudViewController.m */; };
+		E68B7ACF1C1E97B0001DE241 /* AirStashSDLHudViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = E68B7ACD1C1E97B0001DE241 /* AirStashSDLHudViewCell.h */; };
+		E68B7AD01C1E97B0001DE241 /* AirStashSDLHudViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E68B7ACE1C1E97B0001DE241 /* AirStashSDLHudViewCell.m */; };
+		E68B7ADA1C1FCA45001DE241 /* NSString+AirStashMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = E68B7AD81C1FCA45001DE241 /* NSString+AirStashMedia.h */; };
+		E68B7ADB1C1FCA45001DE241 /* NSString+AirStashMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = E68B7AD91C1FCA45001DE241 /* NSString+AirStashMedia.m */; };
+		E69BE5511B93FED300AFBA3F /* allformats.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE54A1B93FED300AFBA3F /* allformats.c */; };
+		E69BE5531B93FED300AFBA3F /* async.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE54B1B93FED300AFBA3F /* async.c */; };
+		E69BE5561B93FED300AFBA3F /* inject.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE54D1B93FED300AFBA3F /* inject.c */; };
+		E69BE5571B93FED300AFBA3F /* opt.h in Headers */ = {isa = PBXBuildFile; fileRef = E69BE54F1B93FED300AFBA3F /* opt.h */; };
+		E69BE5591B9405BD00AFBA3F /* avformat.h in Headers */ = {isa = PBXBuildFile; fileRef = E69BE5581B9405BD00AFBA3F /* avformat.h */; };
+		E69BE55F1B940D1A00AFBA3F /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE55D1B940D1A00AFBA3F /* utils.c */; };
+		E69BE5641B943C0800AFBA3F /* longurl.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE5621B943A9A00AFBA3F /* longurl.c */; };
+		E69BE5681B94468D00AFBA3F /* urlhook.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE5651B94468D00AFBA3F /* urlhook.c */; };
+		E69BE56F1B945B0000AFBA3F /* segment.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE56D1B945B0000AFBA3F /* segment.c */; };
+		E69BE5721B946FF600AFBA3F /* livehook.c in Sources */ = {isa = PBXBuildFile; fileRef = E69BE5701B946FF600AFBA3F /* livehook.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		451103111A5CE36A00337D24 /* AirStashSDLGLRenderNV12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLGLRenderNV12.h; sourceTree = "<group>"; };
+		451103121A5CE36A00337D24 /* AirStashSDLGLRenderNV12.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLGLRenderNV12.m; sourceTree = "<group>"; };
+		45DB4AA71A5D52AE005CAD41 /* sdl_vout_overlay_videotoolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_vout_overlay_videotoolbox.h; sourceTree = "<group>"; };
+		45DB4AA81A5D52AE005CAD41 /* sdl_vout_overlay_videotoolbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sdl_vout_overlay_videotoolbox.m; sourceTree = "<group>"; };
+		554867911C3F0F0000D64B24 /* AirStashVideoToolBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashVideoToolBox.h; path = AirStashMediaPlayer/media/player/ios/pipeline/AirStashVideoToolBox.h; sourceTree = SOURCE_ROOT; };
+		554867921C3F0F0000D64B24 /* AirStashVideoToolBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashVideoToolBox.m; path = AirStashMediaPlayer/media/player/ios/pipeline/AirStashVideoToolBox.m; sourceTree = SOURCE_ROOT; };
+		554867931C3F0F0000D64B24 /* ffpipeline_ios.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ffpipeline_ios.c; path = AirStashMediaPlayer/media/player/ios/pipeline/ffpipeline_ios.c; sourceTree = SOURCE_ROOT; };
+		554867941C3F0F0000D64B24 /* ffpipeline_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ffpipeline_ios.h; path = AirStashMediaPlayer/media/player/ios/pipeline/ffpipeline_ios.h; sourceTree = SOURCE_ROOT; };
+		554867951C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ffpipenode_ios_videotoolbox_vdec.h; path = AirStashMediaPlayer/media/player/ios/pipeline/ffpipenode_ios_videotoolbox_vdec.h; sourceTree = SOURCE_ROOT; };
+		554867961C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ffpipenode_ios_videotoolbox_vdec.m; path = AirStashMediaPlayer/media/player/ios/pipeline/ffpipenode_ios_videotoolbox_vdec.m; sourceTree = SOURCE_ROOT; };
+		554867971C3F0F0000D64B24 /* h264_sps_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = h264_sps_parser.h; path = AirStashMediaPlayer/media/player/ios/pipeline/h264_sps_parser.h; sourceTree = SOURCE_ROOT; };
+		E607FFDE1B7B60F9005F11A6 /* AirStashDeviceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashDeviceModel.h; path = AirStashMediaPlayer/AirStashDeviceModel.h; sourceTree = "<group>"; };
+		E607FFDF1B7B60F9005F11A6 /* AirStashDeviceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashDeviceModel.m; path = AirStashMediaPlayer/AirStashDeviceModel.m; sourceTree = "<group>"; };
+		E62139BC180FA89A00553533 /* AirStashFFOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashFFOptions.h; path = AirStashMediaPlayer/AirStashFFOptions.h; sourceTree = "<group>"; };
+		E62139BD180FA89A00553533 /* AirStashFFOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashFFOptions.m; path = AirStashMediaPlayer/AirStashFFOptions.m; sourceTree = "<group>"; };
+		E63FC27017F01143003551EB /* sdl_audio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_audio.c; sourceTree = "<group>"; };
+		E63FC27317F013DE003551EB /* sdl_dummy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_dummy.h; sourceTree = "<group>"; };
+		E63FC27417F013DE003551EB /* sdl_vout_dummy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_vout_dummy.c; sourceTree = "<group>"; };
+		E63FC27517F013DE003551EB /* sdl_vout_dummy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_vout_dummy.h; sourceTree = "<group>"; };
+		E653C6EF1BCE5A750016835A /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavcodec.a; sourceTree = "<group>"; };
+		E653C6F01BCE5A750016835A /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavfilter.a; sourceTree = "<group>"; };
+		E653C6F11BCE5A750016835A /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavformat.a; sourceTree = "<group>"; };
+		E653C6F21BCE5A750016835A /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
+		E653C6F31BCE5A750016835A /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswresample.a; sourceTree = "<group>"; };
+		E653C6F41BCE5A750016835A /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
+		E654EA8A1B6B27E600B0F2D0 /* AirStashMediaFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AirStashMediaFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E654EA8D1B6B27E600B0F2D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../AirStashMediaFramework/Info.plist; sourceTree = "<group>"; };
+		E654EA8E1B6B27E600B0F2D0 /* AirStashMediaFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AirStashMediaFramework.h; path = ../AirStashMediaFramework/AirStashMediaFramework.h; sourceTree = "<group>"; };
+		E654EAFB1B6B503A00B0F2D0 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
+		E65DC3B719D93D5F004F8A08 /* AirStashKVOController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashKVOController.h; path = AirStashMediaPlayer/AirStashKVOController.h; sourceTree = "<group>"; };
+		E65DC3B819D93D5F004F8A08 /* AirStashKVOController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashKVOController.m; path = AirStashMediaPlayer/AirStashKVOController.m; sourceTree = "<group>"; };
+		E66F8DBF17EEC65200354D80 /* AirStashMPMoviePlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashMPMoviePlayerController.h; path = AirStashMediaPlayer/AirStashMPMoviePlayerController.h; sourceTree = "<group>"; };
+		E66F8DC017EEC65200354D80 /* AirStashMPMoviePlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashMPMoviePlayerController.m; path = AirStashMediaPlayer/AirStashMPMoviePlayerController.m; sourceTree = "<group>"; };
+		E66F8DC217EECB1E00354D80 /* AirStashMediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashMediaPlayer.h; path = AirStashMediaPlayer/AirStashMediaPlayer.h; sourceTree = "<group>"; };
+		E66F8DE517EFD9C300354D80 /* AirStashFFMoviePlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashFFMoviePlayerController.h; path = AirStashMediaPlayer/AirStashFFMoviePlayerController.h; sourceTree = "<group>"; };
+		E66F8DE617EFD9C300354D80 /* AirStashFFMoviePlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashFFMoviePlayerController.m; path = AirStashMediaPlayer/AirStashFFMoviePlayerController.m; sourceTree = "<group>"; };
+		E66F8DEE17EFEA9400354D80 /* player_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player_internal.h; sourceTree = "<group>"; };
+		E66F8DEF17EFEA9400354D80 /* player.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = player.c; sourceTree = "<group>"; };
+		E66F8DF017EFEA9400354D80 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
+		E66F8E0117EFEEA400354D80 /* player_ios.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = player_ios.m; sourceTree = "<group>"; };
+		E66F8E0217EFEEA400354D80 /* player_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player_ios.h; sourceTree = "<group>"; };
+		E6716E491807E5FC00B3FBC1 /* AirStashMediaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashMediaUtils.h; path = AirStashMediaPlayer/AirStashMediaUtils.h; sourceTree = "<group>"; };
+		E6716E4A1807E5FC00B3FBC1 /* AirStashMediaUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashMediaUtils.m; path = AirStashMediaPlayer/AirStashMediaUtils.m; sourceTree = "<group>"; };
+		E672D6F118D3445100C51FF9 /* AirStashMediaModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashMediaModule.h; path = AirStashMediaPlayer/AirStashMediaModule.h; sourceTree = "<group>"; };
+		E672D6F218D3445100C51FF9 /* AirStashMediaModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashMediaModule.m; path = AirStashMediaPlayer/AirStashMediaModule.m; sourceTree = "<group>"; };
+		E67B91AB1A3801DB00717EA9 /* ff_ffpipeline.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ff_ffpipeline.c; sourceTree = "<group>"; };
+		E67B91AC1A3801DB00717EA9 /* ff_ffpipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_ffpipeline.h; sourceTree = "<group>"; };
+		E67B91AD1A3801DB00717EA9 /* ff_ffpipenode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ff_ffpipenode.c; sourceTree = "<group>"; };
+		E67B91AE1A3801DB00717EA9 /* ff_ffpipenode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_ffpipenode.h; sourceTree = "<group>"; };
+		E67B91B21A3801E600717EA9 /* ffpipeline_ffplay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffpipeline_ffplay.c; sourceTree = "<group>"; };
+		E67B91B31A3801E600717EA9 /* ffpipeline_ffplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffpipeline_ffplay.h; sourceTree = "<group>"; };
+		E67B91B41A3801E600717EA9 /* ffpipenode_ffplay_vdec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffpipenode_ffplay_vdec.c; sourceTree = "<group>"; };
+		E67B91B51A3801E600717EA9 /* ffpipenode_ffplay_vdec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffpipenode_ffplay_vdec.h; sourceTree = "<group>"; };
+		E67C4E0319D15B3200415CEE /* AirStashAVPlayerLayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashAVPlayerLayerView.h; path = AirStashMediaPlayer/AirStashAVPlayerLayerView.h; sourceTree = "<group>"; };
+		E67C4E0419D15B3200415CEE /* AirStashAVPlayerLayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashAVPlayerLayerView.m; path = AirStashMediaPlayer/AirStashAVPlayerLayerView.m; sourceTree = "<group>"; };
+		E67C4E0619D15EEA00415CEE /* AirStashAVMoviePlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashAVMoviePlayerController.h; path = AirStashMediaPlayer/AirStashAVMoviePlayerController.h; sourceTree = "<group>"; };
+		E67C4E0719D15EEA00415CEE /* AirStashAVMoviePlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashAVMoviePlayerController.m; path = AirStashMediaPlayer/AirStashAVMoviePlayerController.m; sourceTree = "<group>"; };
+		E67F82E91C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLGLRenderI444P10LE.h; sourceTree = "<group>"; };
+		E67F82EA1C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLGLRenderI444P10LE.m; sourceTree = "<group>"; };
+		E67FB4AC1B4A766F00AA94AA /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		E68B7AC31C1E7F20001DE241 /* AirStashSDLHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLHudViewController.h; sourceTree = "<group>"; };
+		E68B7AC41C1E7F20001DE241 /* AirStashSDLHudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLHudViewController.m; sourceTree = "<group>"; };
+		E68B7ACD1C1E97B0001DE241 /* AirStashSDLHudViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLHudViewCell.h; sourceTree = "<group>"; };
+		E68B7ACE1C1E97B0001DE241 /* AirStashSDLHudViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLHudViewCell.m; sourceTree = "<group>"; };
+		E68B7AD81C1FCA45001DE241 /* NSString+AirStashMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+AirStashMedia.h"; sourceTree = "<group>"; };
+		E68B7AD91C1FCA45001DE241 /* NSString+AirStashMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+AirStashMedia.m"; sourceTree = "<group>"; };
+		E69007F11B96E2A600EB346D /* url.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = url.h; sourceTree = "<group>"; };
+		E6903EC017EAF6C500CFD954 /* AirStashMediaPlayer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AirStashMediaPlayer-Prefix.pch"; path = "../AirStashMediaPlayer/AirStashMediaPlayer-Prefix.pch"; sourceTree = "<group>"; };
+		E6903EC117EAF6C500CFD954 /* AirStashMediaPlayback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AirStashMediaPlayback.h; path = AirStashMediaPlayer/AirStashMediaPlayback.h; sourceTree = "<group>"; };
+		E6903FD517EAFC6100CFD954 /* ff_cmdutils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ff_cmdutils.c; sourceTree = "<group>"; };
+		E6903FD617EAFC6100CFD954 /* ff_cmdutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_cmdutils.h; sourceTree = "<group>"; };
+		E6903FD717EAFC6100CFD954 /* ff_fferror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_fferror.h; sourceTree = "<group>"; };
+		E6903FD817EAFC6100CFD954 /* ff_ffinc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_ffinc.h; sourceTree = "<group>"; };
+		E6903FD917EAFC6100CFD954 /* ff_ffmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_ffmsg.h; sourceTree = "<group>"; };
+		E6903FDA17EAFC6100CFD954 /* ff_ffmsg_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_ffmsg_queue.h; sourceTree = "<group>"; };
+		E6903FDB17EAFC6100CFD954 /* ff_ffplay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ff_ffplay.c; sourceTree = "<group>"; };
+		E6903FDC17EAFC6100CFD954 /* ff_ffplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_ffplay.h; sourceTree = "<group>"; };
+		E6903FDE17EAFC6100CFD954 /* ff_ffplay_def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_ffplay_def.h; sourceTree = "<group>"; };
+		E6903FF117EAFC6100CFD954 /* image_convert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = image_convert.c; sourceTree = "<group>"; };
+		E6903FF917EAFC6100CFD954 /* sdl_image_convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_image_convert.h; sourceTree = "<group>"; };
+		E6903FFA17EAFC6100CFD954 /* sdl_inc_ffmpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_inc_ffmpeg.h; sourceTree = "<group>"; };
+		E6903FFB17EAFC6100CFD954 /* sdl_vout_overlay_ffmpeg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_vout_overlay_ffmpeg.c; sourceTree = "<group>"; };
+		E6903FFC17EAFC6100CFD954 /* sdl_vout_overlay_ffmpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_vout_overlay_ffmpeg.h; sourceTree = "<group>"; };
+		E6903FFD17EAFC6100CFD954 /* sdl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl.h; sourceTree = "<group>"; };
+		E6903FFF17EAFC6100CFD954 /* sdl_aout.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_aout.c; sourceTree = "<group>"; };
+		E690400017EAFC6100CFD954 /* sdl_aout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_aout.h; sourceTree = "<group>"; };
+		E690400117EAFC6100CFD954 /* sdl_aout_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_aout_internal.h; sourceTree = "<group>"; };
+		E690400217EAFC6100CFD954 /* sdl_audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_audio.h; sourceTree = "<group>"; };
+		E690400317EAFC6100CFD954 /* sdl_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_endian.h; sourceTree = "<group>"; };
+		E690400417EAFC6100CFD954 /* sdl_error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_error.c; sourceTree = "<group>"; };
+		E690400517EAFC6100CFD954 /* sdl_error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_error.h; sourceTree = "<group>"; };
+		E690400617EAFC6100CFD954 /* sdl_fourcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_fourcc.h; sourceTree = "<group>"; };
+		E690400717EAFC6100CFD954 /* sdl_inc_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_inc_internal.h; sourceTree = "<group>"; };
+		E690400817EAFC6100CFD954 /* sdl_mutex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_mutex.c; sourceTree = "<group>"; };
+		E690400917EAFC6100CFD954 /* sdl_mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_mutex.h; sourceTree = "<group>"; };
+		E690400A17EAFC6100CFD954 /* sdl_stdinc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_stdinc.c; sourceTree = "<group>"; };
+		E690400B17EAFC6100CFD954 /* sdl_stdinc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_stdinc.h; sourceTree = "<group>"; };
+		E690400C17EAFC6100CFD954 /* sdl_thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_thread.c; sourceTree = "<group>"; };
+		E690400D17EAFC6100CFD954 /* sdl_thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_thread.h; sourceTree = "<group>"; };
+		E690400E17EAFC6100CFD954 /* sdl_timer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_timer.c; sourceTree = "<group>"; };
+		E690400F17EAFC6100CFD954 /* sdl_timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_timer.h; sourceTree = "<group>"; };
+		E690401017EAFC6100CFD954 /* sdl_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_video.h; sourceTree = "<group>"; };
+		E690401117EAFC6100CFD954 /* sdl_vout.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdl_vout.c; sourceTree = "<group>"; };
+		E690401217EAFC6100CFD954 /* sdl_vout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_vout.h; sourceTree = "<group>"; };
+		E690401317EAFC6100CFD954 /* sdl_vout_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_vout_internal.h; sourceTree = "<group>"; };
+		E69BE54A1B93FED300AFBA3F /* allformats.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = allformats.c; sourceTree = "<group>"; };
+		E69BE54B1B93FED300AFBA3F /* async.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = async.c; sourceTree = "<group>"; };
+		E69BE54D1B93FED300AFBA3F /* inject.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inject.c; sourceTree = "<group>"; };
+		E69BE54F1B93FED300AFBA3F /* opt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opt.h; sourceTree = "<group>"; };
+		E69BE5581B9405BD00AFBA3F /* avformat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avformat.h; sourceTree = "<group>"; };
+		E69BE55D1B940D1A00AFBA3F /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
+		E69BE5621B943A9A00AFBA3F /* longurl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = longurl.c; sourceTree = "<group>"; };
+		E69BE5651B94468D00AFBA3F /* urlhook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = urlhook.c; sourceTree = "<group>"; };
+		E69BE56D1B945B0000AFBA3F /* segment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = segment.c; sourceTree = "<group>"; };
+		E69BE5701B946FF600AFBA3F /* livehook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = livehook.c; sourceTree = "<group>"; };
+		E6C2FD391B300A390081D321 /* ff_ffplay_debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff_ffplay_debug.h; sourceTree = "<group>"; };
+		E6CA1EE71B4FAFCF00BCAF89 /* sdl_class.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_class.h; sourceTree = "<group>"; };
+		E6CA1EE81B4FAFCF00BCAF89 /* sdl_misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_misc.h; sourceTree = "<group>"; };
+		E6CA1EE91B4FB04500BCAF89 /* sdl_log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_log.h; sourceTree = "<group>"; };
+		E6EE92A1187810C5009EAB56 /* AirStashAudioKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashAudioKit.h; path = AirStashMediaPlayer/AirStashAudioKit.h; sourceTree = "<group>"; };
+		E6EE92A2187810C5009EAB56 /* AirStashAudioKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashAudioKit.m; path = AirStashMediaPlayer/AirStashAudioKit.m; sourceTree = "<group>"; };
+		E6EE92A61878230C009EAB56 /* sdl_aout_ios_audiounit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_aout_ios_audiounit.h; sourceTree = "<group>"; };
+		E6EE92A71878230C009EAB56 /* sdl_aout_ios_audiounit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sdl_aout_ios_audiounit.m; sourceTree = "<group>"; };
+		E6EE92A81878230C009EAB56 /* sdl_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_ios.h; sourceTree = "<group>"; };
+		E6EE92A91878230C009EAB56 /* sdl_thread_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_thread_ios.h; sourceTree = "<group>"; };
+		E6EE92AA1878230C009EAB56 /* sdl_thread_ios.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sdl_thread_ios.m; sourceTree = "<group>"; };
+		E6EE92AB1878230C009EAB56 /* sdl_vout_ios_gles2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_vout_ios_gles2.h; sourceTree = "<group>"; };
+		E6EE92AC1878230C009EAB56 /* sdl_vout_ios_gles2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sdl_vout_ios_gles2.m; sourceTree = "<group>"; };
+		E6EE92AD1878230C009EAB56 /* AirStashSDLAudioUnitController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLAudioUnitController.h; sourceTree = "<group>"; };
+		E6EE92AE1878230C009EAB56 /* AirStashSDLAudioUnitController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLAudioUnitController.m; sourceTree = "<group>"; };
+		E6EE92AF1878230C009EAB56 /* AirStashSDLGLRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLGLRender.h; sourceTree = "<group>"; };
+		E6EE92B01878230C009EAB56 /* AIrStashSDLGLRenderI420.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIrStashSDLGLRenderI420.h; sourceTree = "<group>"; };
+		E6EE92B11878230C009EAB56 /* AirStashSDLGLRenderI420.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLGLRenderI420.m; sourceTree = "<group>"; };
+		E6EE92B21878230C009EAB56 /* AirStashSDLGLRenderRV24.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLGLRenderRV24.h; sourceTree = "<group>"; };
+		E6EE92B31878230C009EAB56 /* AirStashSDLGLRenderRV24.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLGLRenderRV24.m; sourceTree = "<group>"; };
+		E6EE92B41878230C009EAB56 /* AirStashSDLGLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLGLShader.h; sourceTree = "<group>"; };
+		E6EE92B51878230C009EAB56 /* AirStashSDLGLShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLGLShader.m; sourceTree = "<group>"; };
+		E6EE92B61878230C009EAB56 /* AirStashSDLGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLGLView.h; sourceTree = "<group>"; };
+		E6EE92B71878230C009EAB56 /* AirStashSDLGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLGLView.m; sourceTree = "<group>"; };
+		E6EE92C01878236A009EAB56 /* AirStashSDLAudioQueueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLAudioQueueController.h; sourceTree = "<group>"; };
+		E6EE92C11878236A009EAB56 /* AirStashSDLAudioQueueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLAudioQueueController.m; sourceTree = "<group>"; };
+		E6EE92C618782770009EAB56 /* AirStashSDLAudioKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirStashSDLAudioKit.h; sourceTree = "<group>"; };
+		E6EE92C718782770009EAB56 /* AirStashSDLAudioKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirStashSDLAudioKit.m; sourceTree = "<group>"; };
+		E6F727B917F2D9D30043623F /* AirStashFFMoviePlayerDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AirStashFFMoviePlayerDef.h; path = AirStashMediaPlayer/AirStashFFMoviePlayerDef.h; sourceTree = "<group>"; };
+		E6F727BA17F2D9D30043623F /* AirStashFFMoviePlayerDef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashFFMoviePlayerDef.m; path = AirStashMediaPlayer/AirStashFFMoviePlayerDef.m; sourceTree = "<group>"; };
+		E6F727C117F7C9B90043623F /* AirStashMediaPlayback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AirStashMediaPlayback.m; path = AirStashMediaPlayer/AirStashMediaPlayback.m; sourceTree = "<group>"; };
+		E6FAD9551A515CE300725002 /* meta.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = meta.c; sourceTree = "<group>"; };
+		E6FAD9561A515CE300725002 /* meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = meta.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E654EA861B6B27E600B0F2D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E653C6F61BCE5A750016835A /* libavcodec.a in Frameworks */,
+				E653C6F81BCE5A750016835A /* libavfilter.a in Frameworks */,
+				E653C6FA1BCE5A750016835A /* libavformat.a in Frameworks */,
+				E653C6FC1BCE5A750016835A /* libavutil.a in Frameworks */,
+				E653C6FE1BCE5A750016835A /* libswresample.a in Frameworks */,
+				E653C7001BCE5A750016835A /* libswscale.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4543161F1A66481600676070 /* pipeline */ = {
+			isa = PBXGroup;
+			children = (
+				554867911C3F0F0000D64B24 /* AirStashVideoToolBox.h */,
+				554867921C3F0F0000D64B24 /* AirStashVideoToolBox.m */,
+				554867931C3F0F0000D64B24 /* ffpipeline_ios.c */,
+				554867941C3F0F0000D64B24 /* ffpipeline_ios.h */,
+				554867951C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.h */,
+				554867961C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.m */,
+				554867971C3F0F0000D64B24 /* h264_sps_parser.h */,
+			);
+			name = pipeline;
+			path = media/player/ios/pipeline;
+			sourceTree = "<group>";
+		};
+		E63FC27217F013DE003551EB /* dummy */ = {
+			isa = PBXGroup;
+			children = (
+				E63FC27317F013DE003551EB /* sdl_dummy.h */,
+				E63FC27417F013DE003551EB /* sdl_vout_dummy.c */,
+				E63FC27517F013DE003551EB /* sdl_vout_dummy.h */,
+			);
+			path = dummy;
+			sourceTree = "<group>";
+		};
+		E654EA8B1B6B27E600B0F2D0 /* AirStashMediaFramework */ = {
+			isa = PBXGroup;
+			children = (
+				E654EA8E1B6B27E600B0F2D0 /* AirStashMediaFramework.h */,
+				E654EA8C1B6B27E600B0F2D0 /* Supporting Files */,
+			);
+			name = AirStashMediaFramework;
+			path = IJKMediaFramework;
+			sourceTree = "<group>";
+		};
+		E654EA8C1B6B27E600B0F2D0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E654EA8D1B6B27E600B0F2D0 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E66F8DBC17EEC2CF00354D80 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				E6F727B517F2B1690043623F /* AirStashMediaPlayer */,
+				E67C4E0219D15B0600415CEE /* AirStashAVMoviePlayerController */,
+				E66F8DBE17EEC5DE00354D80 /* AirStashMPMoviePlayerController */,
+				E6903EBE17EAF6C500CFD954 /* AirStashFFMoviePlayerController */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		E66F8DBE17EEC5DE00354D80 /* AirStashMPMoviePlayerController */ = {
+			isa = PBXGroup;
+			children = (
+				E66F8DBF17EEC65200354D80 /* AirStashMPMoviePlayerController.h */,
+				E66F8DC017EEC65200354D80 /* AirStashMPMoviePlayerController.m */,
+			);
+			name = AirStashMPMoviePlayerController;
+			sourceTree = "<group>";
+		};
+		E66F8DF817EFEC1300354D80 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				4543161F1A66481600676070 /* pipeline */,
+				E66F8E0117EFEEA400354D80 /* player_ios.m */,
+				E66F8E0217EFEEA400354D80 /* player_ios.h */,
+			);
+			name = ios;
+			path = ../../ios/AirStashMediaPlayer/AirStashMediaPlayer/media/player/ios;
+			sourceTree = "<group>";
+		};
+		E67B91B11A3801E600717EA9 /* pipeline */ = {
+			isa = PBXGroup;
+			children = (
+				E67B91B21A3801E600717EA9 /* ffpipeline_ffplay.c */,
+				E67B91B31A3801E600717EA9 /* ffpipeline_ffplay.h */,
+				E67B91B41A3801E600717EA9 /* ffpipenode_ffplay_vdec.c */,
+				E67B91B51A3801E600717EA9 /* ffpipenode_ffplay_vdec.h */,
+			);
+			path = pipeline;
+			sourceTree = "<group>";
+		};
+		E67C4E0219D15B0600415CEE /* AirStashAVMoviePlayerController */ = {
+			isa = PBXGroup;
+			children = (
+				E67C4E0319D15B3200415CEE /* AirStashAVPlayerLayerView.h */,
+				E67C4E0419D15B3200415CEE /* AirStashAVPlayerLayerView.m */,
+				E67C4E0619D15EEA00415CEE /* AirStashAVMoviePlayerController.h */,
+				E67C4E0719D15EEA00415CEE /* AirStashAVMoviePlayerController.m */,
+			);
+			name = AirStashAVMoviePlayerController;
+			sourceTree = "<group>";
+		};
+		E6903EB017EAF6C500CFD954 = {
+			isa = PBXGroup;
+			children = (
+				E66F8DBC17EEC2CF00354D80 /* Classes */,
+				E654EA8B1B6B27E600B0F2D0 /* AirStashMediaFramework */,
+				E6903EBB17EAF6C500CFD954 /* Frameworks */,
+				E6903EBA17EAF6C500CFD954 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E6903EBA17EAF6C500CFD954 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E654EA8A1B6B27E600B0F2D0 /* AirStashMediaFramework.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E6903EBB17EAF6C500CFD954 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E6903EBE17EAF6C500CFD954 /* AirStashFFMoviePlayerController */ = {
+			isa = PBXGroup;
+			children = (
+				E6903F7617EAFC2C00CFD954 /* ffmpeg */,
+				E66F8DE517EFD9C300354D80 /* AirStashFFMoviePlayerController.h */,
+				E66F8DE617EFD9C300354D80 /* AirStashFFMoviePlayerController.m */,
+				E6F727B917F2D9D30043623F /* AirStashFFMoviePlayerDef.h */,
+				E6F727BA17F2D9D30043623F /* AirStashFFMoviePlayerDef.m */,
+				E62139BC180FA89A00553533 /* AirStashFFOptions.h */,
+				E62139BD180FA89A00553533 /* AirStashFFOptions.m */,
+				E6903FCC17EAFC6100CFD954 /* media */,
+				E6903EBF17EAF6C500CFD954 /* Supporting Files */,
+			);
+			name = AirStashFFMoviePlayerController;
+			path = IJKMediaPlayer;
+			sourceTree = "<group>";
+		};
+		E6903EBF17EAF6C500CFD954 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E6903EC017EAF6C500CFD954 /* AirStashMediaPlayer-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E6903F7617EAFC2C00CFD954 /* ffmpeg */ = {
+			isa = PBXGroup;
+			children = (
+				E6903FC117EAFC2C00CFD954 /* lib */,
+			);
+			name = ffmpeg;
+			path = ../../build/universal;
+			sourceTree = "<group>";
+		};
+		E6903FC117EAFC2C00CFD954 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				E653C6EF1BCE5A750016835A /* libavcodec.a */,
+				E653C6F01BCE5A750016835A /* libavfilter.a */,
+				E653C6F11BCE5A750016835A /* libavformat.a */,
+				E653C6F21BCE5A750016835A /* libavutil.a */,
+				E653C6F31BCE5A750016835A /* libswresample.a */,
+				E653C6F41BCE5A750016835A /* libswscale.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		E6903FCC17EAFC6100CFD954 /* media */ = {
+			isa = PBXGroup;
+			children = (
+				E6903FCE17EAFC6100CFD954 /* player */,
+				E6903FDF17EAFC6100CFD954 /* sdl */,
+			);
+			name = media;
+			path = AirStashMediaPlayer/media;
+			sourceTree = "<group>";
+		};
+		E6903FCE17EAFC6100CFD954 /* player */ = {
+			isa = PBXGroup;
+			children = (
+				E67FB4AC1B4A766F00AA94AA /* config.h */,
+				E6903FD517EAFC6100CFD954 /* ff_cmdutils.c */,
+				E6903FD617EAFC6100CFD954 /* ff_cmdutils.h */,
+				E6903FD717EAFC6100CFD954 /* ff_fferror.h */,
+				E6903FD817EAFC6100CFD954 /* ff_ffinc.h */,
+				E6903FDA17EAFC6100CFD954 /* ff_ffmsg_queue.h */,
+				E6903FD917EAFC6100CFD954 /* ff_ffmsg.h */,
+				E67B91AB1A3801DB00717EA9 /* ff_ffpipeline.c */,
+				E67B91AC1A3801DB00717EA9 /* ff_ffpipeline.h */,
+				E67B91AD1A3801DB00717EA9 /* ff_ffpipenode.c */,
+				E67B91AE1A3801DB00717EA9 /* ff_ffpipenode.h */,
+				E6C2FD391B300A390081D321 /* ff_ffplay_debug.h */,
+				E6903FDE17EAFC6100CFD954 /* ff_ffplay_def.h */,
+				E6903FDB17EAFC6100CFD954 /* ff_ffplay.c */,
+				E6903FDC17EAFC6100CFD954 /* ff_ffplay.h */,
+				E69BE5491B93FED300AFBA3F /* avformat */,
+				E69BE54E1B93FED300AFBA3F /* avutil */,
+				E6FAD9551A515CE300725002 /* meta.c */,
+				E6FAD9561A515CE300725002 /* meta.h */,
+				E66F8DEE17EFEA9400354D80 /* player_internal.h */,
+				E66F8DEF17EFEA9400354D80 /* player.c */,
+				E66F8DF017EFEA9400354D80 /* player.h */,
+				E66F8DF817EFEC1300354D80 /* ios */,
+				E67B91B11A3801E600717EA9 /* pipeline */,
+				E654EAFB1B6B503A00B0F2D0 /* version.h */,
+			);
+			path = player;
+			sourceTree = "<group>";
+		};
+		E6903FDF17EAFC6100CFD954 /* sdl */ = {
+			isa = PBXGroup;
+			children = (
+				E63FC27217F013DE003551EB /* dummy */,
+				E6903FEF17EAFC6100CFD954 /* ffmpeg */,
+				E690400117EAFC6100CFD954 /* sdl_aout_internal.h */,
+				E6903FFF17EAFC6100CFD954 /* sdl_aout.c */,
+				E690400017EAFC6100CFD954 /* sdl_aout.h */,
+				E63FC27017F01143003551EB /* sdl_audio.c */,
+				E690400217EAFC6100CFD954 /* sdl_audio.h */,
+				E6CA1EE71B4FAFCF00BCAF89 /* sdl_class.h */,
+				E690400317EAFC6100CFD954 /* sdl_endian.h */,
+				E690400417EAFC6100CFD954 /* sdl_error.c */,
+				E690400517EAFC6100CFD954 /* sdl_error.h */,
+				E690400617EAFC6100CFD954 /* sdl_fourcc.h */,
+				E690400717EAFC6100CFD954 /* sdl_inc_internal.h */,
+				E6CA1EE91B4FB04500BCAF89 /* sdl_log.h */,
+				E6CA1EE81B4FAFCF00BCAF89 /* sdl_misc.h */,
+				E690400817EAFC6100CFD954 /* sdl_mutex.c */,
+				E690400917EAFC6100CFD954 /* sdl_mutex.h */,
+				E690400A17EAFC6100CFD954 /* sdl_stdinc.c */,
+				E690400B17EAFC6100CFD954 /* sdl_stdinc.h */,
+				E690400C17EAFC6100CFD954 /* sdl_thread.c */,
+				E690400D17EAFC6100CFD954 /* sdl_thread.h */,
+				E690400E17EAFC6100CFD954 /* sdl_timer.c */,
+				E690400F17EAFC6100CFD954 /* sdl_timer.h */,
+				E690401017EAFC6100CFD954 /* sdl_video.h */,
+				E690401317EAFC6100CFD954 /* sdl_vout_internal.h */,
+				E690401117EAFC6100CFD954 /* sdl_vout.c */,
+				E690401217EAFC6100CFD954 /* sdl_vout.h */,
+				E6903FFD17EAFC6100CFD954 /* sdl.h */,
+				E6EE92A51878230C009EAB56 /* ios */,
+			);
+			path = sdl;
+			sourceTree = "<group>";
+		};
+		E6903FEF17EAFC6100CFD954 /* ffmpeg */ = {
+			isa = PBXGroup;
+			children = (
+				E6903FF017EAFC6100CFD954 /* abi_all */,
+				E6903FF917EAFC6100CFD954 /* sdl_image_convert.h */,
+				E6903FFA17EAFC6100CFD954 /* sdl_inc_ffmpeg.h */,
+				E6903FFB17EAFC6100CFD954 /* sdl_vout_overlay_ffmpeg.c */,
+				E6903FFC17EAFC6100CFD954 /* sdl_vout_overlay_ffmpeg.h */,
+			);
+			path = ffmpeg;
+			sourceTree = "<group>";
+		};
+		E6903FF017EAFC6100CFD954 /* abi_all */ = {
+			isa = PBXGroup;
+			children = (
+				E6903FF117EAFC6100CFD954 /* image_convert.c */,
+			);
+			path = abi_all;
+			sourceTree = "<group>";
+		};
+		E69BE5491B93FED300AFBA3F /* avformat */ = {
+			isa = PBXGroup;
+			children = (
+				E69BE54A1B93FED300AFBA3F /* allformats.c */,
+				E69BE54B1B93FED300AFBA3F /* async.c */,
+				E69BE5581B9405BD00AFBA3F /* avformat.h */,
+				E69BE54D1B93FED300AFBA3F /* inject.c */,
+				E69BE5701B946FF600AFBA3F /* livehook.c */,
+				E69BE5621B943A9A00AFBA3F /* longurl.c */,
+				E69BE56D1B945B0000AFBA3F /* segment.c */,
+				E69BE5651B94468D00AFBA3F /* urlhook.c */,
+				E69007F11B96E2A600EB346D /* url.h */,
+				E69BE55D1B940D1A00AFBA3F /* utils.c */,
+			);
+			path = avformat;
+			sourceTree = "<group>";
+		};
+		E69BE54E1B93FED300AFBA3F /* avutil */ = {
+			isa = PBXGroup;
+			children = (
+				E69BE54F1B93FED300AFBA3F /* opt.h */,
+			);
+			path = avutil;
+			sourceTree = "<group>";
+		};
+		E6EE92A51878230C009EAB56 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				E6EE92A61878230C009EAB56 /* sdl_aout_ios_audiounit.h */,
+				E6EE92A71878230C009EAB56 /* sdl_aout_ios_audiounit.m */,
+				E6EE92A81878230C009EAB56 /* sdl_ios.h */,
+				E6EE92A91878230C009EAB56 /* sdl_thread_ios.h */,
+				E6EE92AA1878230C009EAB56 /* sdl_thread_ios.m */,
+				E6EE92AB1878230C009EAB56 /* sdl_vout_ios_gles2.h */,
+				E6EE92AC1878230C009EAB56 /* sdl_vout_ios_gles2.m */,
+				45DB4AA71A5D52AE005CAD41 /* sdl_vout_overlay_videotoolbox.h */,
+				45DB4AA81A5D52AE005CAD41 /* sdl_vout_overlay_videotoolbox.m */,
+				E6EE92C618782770009EAB56 /* AirStashSDLAudioKit.h */,
+				E6EE92C718782770009EAB56 /* AirStashSDLAudioKit.m */,
+				E6EE92C01878236A009EAB56 /* AirStashSDLAudioQueueController.h */,
+				E6EE92C11878236A009EAB56 /* AirStashSDLAudioQueueController.m */,
+				E6EE92AD1878230C009EAB56 /* AirStashSDLAudioUnitController.h */,
+				E6EE92AE1878230C009EAB56 /* AirStashSDLAudioUnitController.m */,
+				E6EE92AF1878230C009EAB56 /* AirStashSDLGLRender.h */,
+				E6EE92B01878230C009EAB56 /* AIrStashSDLGLRenderI420.h */,
+				E6EE92B11878230C009EAB56 /* AirStashSDLGLRenderI420.m */,
+				E67F82E91C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.h */,
+				E67F82EA1C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.m */,
+				451103111A5CE36A00337D24 /* AirStashSDLGLRenderNV12.h */,
+				451103121A5CE36A00337D24 /* AirStashSDLGLRenderNV12.m */,
+				E6EE92B21878230C009EAB56 /* AirStashSDLGLRenderRV24.h */,
+				E6EE92B31878230C009EAB56 /* AirStashSDLGLRenderRV24.m */,
+				E6EE92B41878230C009EAB56 /* AirStashSDLGLShader.h */,
+				E6EE92B51878230C009EAB56 /* AirStashSDLGLShader.m */,
+				E6EE92B61878230C009EAB56 /* AirStashSDLGLView.h */,
+				E6EE92B71878230C009EAB56 /* AirStashSDLGLView.m */,
+				E68B7ACD1C1E97B0001DE241 /* AirStashSDLHudViewCell.h */,
+				E68B7ACE1C1E97B0001DE241 /* AirStashSDLHudViewCell.m */,
+				E68B7AC31C1E7F20001DE241 /* AirStashSDLHudViewController.h */,
+				E68B7AC41C1E7F20001DE241 /* AirStashSDLHudViewController.m */,
+			);
+			name = ios;
+			path = ../../ios/AirStashMediaPlayer/AirStashMediaPlayer/media/sdl/ios;
+			sourceTree = "<group>";
+		};
+		E6F727B517F2B1690043623F /* AirStashMediaPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				E607FFDE1B7B60F9005F11A6 /* AirStashDeviceModel.h */,
+				E607FFDF1B7B60F9005F11A6 /* AirStashDeviceModel.m */,
+				E6EE92A1187810C5009EAB56 /* AirStashAudioKit.h */,
+				E6EE92A2187810C5009EAB56 /* AirStashAudioKit.m */,
+				E672D6F118D3445100C51FF9 /* AirStashMediaModule.h */,
+				E672D6F218D3445100C51FF9 /* AirStashMediaModule.m */,
+				E6903EC117EAF6C500CFD954 /* AirStashMediaPlayback.h */,
+				E6F727C117F7C9B90043623F /* AirStashMediaPlayback.m */,
+				E66F8DC217EECB1E00354D80 /* AirStashMediaPlayer.h */,
+				E6716E491807E5FC00B3FBC1 /* AirStashMediaUtils.h */,
+				E6716E4A1807E5FC00B3FBC1 /* AirStashMediaUtils.m */,
+				E65DC3B719D93D5F004F8A08 /* AirStashKVOController.h */,
+				E65DC3B819D93D5F004F8A08 /* AirStashKVOController.m */,
+				E68B7AD81C1FCA45001DE241 /* NSString+AirStashMedia.h */,
+				E68B7AD91C1FCA45001DE241 /* NSString+AirStashMedia.m */,
+			);
+			name = AirStashMediaPlayer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E654EA871B6B27E600B0F2D0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E68B7AC51C1E7F20001DE241 /* AirStashSDLHudViewController.h in Headers */,
+				554867981C3F0F0000D64B24 /* AirStashVideoToolBox.h in Headers */,
+				5548679B1C3F0F0000D64B24 /* ffpipeline_ios.h in Headers */,
+				E68B7ADA1C1FCA45001DE241 /* NSString+AirStashMedia.h in Headers */,
+				5548679E1C3F0F0000D64B24 /* h264_sps_parser.h in Headers */,
+				E654EAE81B6B295200B0F2D0 /* AirStashAVMoviePlayerController.h in Headers */,
+				E654EAEA1B6B295200B0F2D0 /* AirStashFFMoviePlayerController.h in Headers */,
+				5548679C1C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.h in Headers */,
+				E654EAEC1B6B295200B0F2D0 /* AirStashFFOptions.h in Headers */,
+				E67F82EB1C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.h in Headers */,
+				E654EA8F1B6B27E600B0F2D0 /* AirStashMediaFramework.h in Headers */,
+				E654EAE61B6B295200B0F2D0 /* AirStashMediaModule.h in Headers */,
+				E69BE5571B93FED300AFBA3F /* opt.h in Headers */,
+				E654EAE71B6B295200B0F2D0 /* AirStashMediaPlayback.h in Headers */,
+				E69BE5591B9405BD00AFBA3F /* avformat.h in Headers */,
+				E654EAED1B6B29C100B0F2D0 /* AirStashMediaPlayer.h in Headers */,
+				E654EAE91B6B295200B0F2D0 /* AirStashMPMoviePlayerController.h in Headers */,
+				E68B7ACF1C1E97B0001DE241 /* AirStashSDLHudViewCell.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E654EA891B6B27E600B0F2D0 /* AirStashMediaFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E654EAA11B6B27E600B0F2D0 /* Build configuration list for PBXNativeTarget "AirStashMediaFramework" */;
+			buildPhases = (
+				E654EA851B6B27E600B0F2D0 /* Sources */,
+				E654EA861B6B27E600B0F2D0 /* Frameworks */,
+				E654EA871B6B27E600B0F2D0 /* Headers */,
+				E654EA881B6B27E600B0F2D0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AirStashMediaFramework;
+			productName = IJKMediaFramework;
+			productReference = E654EA8A1B6B27E600B0F2D0 /* AirStashMediaFramework.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E6903EB117EAF6C500CFD954 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = bilibili;
+				TargetAttributes = {
+					E654EA891B6B27E600B0F2D0 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+				};
+			};
+			buildConfigurationList = E6903EB417EAF6C500CFD954 /* Build configuration list for PBXProject "AirStashMediaPlayer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E6903EB017EAF6C500CFD954;
+			productRefGroup = E6903EBA17EAF6C500CFD954 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E654EA891B6B27E600B0F2D0 /* AirStashMediaFramework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E654EA881B6B27E600B0F2D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E654EA851B6B27E600B0F2D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E654EAD01B6B288A00B0F2D0 /* AirStashSDLGLRenderNV12.m in Sources */,
+				E69BE5641B943C0800AFBA3F /* longurl.c in Sources */,
+				E69BE56F1B945B0000AFBA3F /* segment.c in Sources */,
+				E654EAA71B6B283700B0F2D0 /* AirStashKVOController.m in Sources */,
+				E654EAC71B6B287E00B0F2D0 /* sdl_vout.c in Sources */,
+				E69BE55F1B940D1A00AFBA3F /* utils.c in Sources */,
+				E69BE5511B93FED300AFBA3F /* allformats.c in Sources */,
+				E654EABB1B6B286B00B0F2D0 /* ffpipenode_ffplay_vdec.c in Sources */,
+				E654EACF1B6B288A00B0F2D0 /* AirStashSDLGLRenderI420.m in Sources */,
+				E654EAD21B6B288A00B0F2D0 /* AirStashSDLGLShader.m in Sources */,
+				E67F82EC1C27E66900501D6C /* AirStashSDLGLRenderI444P10LE.m in Sources */,
+				E654EAA91B6B283D00B0F2D0 /* AirStashAVMoviePlayerController.m in Sources */,
+				E654EAAC1B6B284C00B0F2D0 /* AirStashFFMoviePlayerDef.m in Sources */,
+				E654EAB91B6B286700B0F2D0 /* player_ios.m in Sources */,
+				E654EABD1B6B287000B0F2D0 /* sdl_vout_dummy.c in Sources */,
+				E69BE5681B94468D00AFBA3F /* urlhook.c in Sources */,
+				E654EAC21B6B287E00B0F2D0 /* sdl_error.c in Sources */,
+				E607FFE11B7B62E3005F11A6 /* AirStashDeviceModel.m in Sources */,
+				E654EAA31B6B283700B0F2D0 /* AirStashAudioKit.m in Sources */,
+				E654EAAA1B6B284300B0F2D0 /* AirStashMPMoviePlayerController.m in Sources */,
+				E68B7AD01C1E97B0001DE241 /* AirStashSDLHudViewCell.m in Sources */,
+				E654EACB1B6B288A00B0F2D0 /* sdl_vout_overlay_videotoolbox.m in Sources */,
+				E654EAB11B6B285900B0F2D0 /* ff_ffpipenode.c in Sources */,
+				E654EAC41B6B287E00B0F2D0 /* sdl_stdinc.c in Sources */,
+				E654EAA61B6B283700B0F2D0 /* AirStashMediaUtils.m in Sources */,
+				E654EAC81B6B288A00B0F2D0 /* sdl_aout_ios_audiounit.m in Sources */,
+				5548679D1C3F0F0000D64B24 /* ffpipenode_ios_videotoolbox_vdec.m in Sources */,
+				E69BE5721B946FF600AFBA3F /* livehook.c in Sources */,
+				E654EAA51B6B283700B0F2D0 /* AirStashMediaPlayback.m in Sources */,
+				E654EAB01B6B285900B0F2D0 /* ff_ffpipeline.c in Sources */,
+				E654EAD11B6B288A00B0F2D0 /* AirStashSDLGLRenderRV24.m in Sources */,
+				E654EACC1B6B288A00B0F2D0 /* AirStashSDLAudioKit.m in Sources */,
+				E654EABF1B6B287600B0F2D0 /* sdl_vout_overlay_ffmpeg.c in Sources */,
+				E654EAC31B6B287E00B0F2D0 /* sdl_mutex.c in Sources */,
+				E654EACD1B6B288A00B0F2D0 /* AirStashSDLAudioQueueController.m in Sources */,
+				E654EAC51B6B287E00B0F2D0 /* sdl_thread.c in Sources */,
+				E68B7ADB1C1FCA45001DE241 /* NSString+AirStashMedia.m in Sources */,
+				E654EAB21B6B285900B0F2D0 /* ff_ffplay.c in Sources */,
+				E654EAC01B6B287E00B0F2D0 /* sdl_aout.c in Sources */,
+				E69BE5561B93FED300AFBA3F /* inject.c in Sources */,
+				E654EAC11B6B287E00B0F2D0 /* sdl_audio.c in Sources */,
+				E654EAC91B6B288A00B0F2D0 /* sdl_thread_ios.m in Sources */,
+				E654EAB31B6B285900B0F2D0 /* meta.c in Sources */,
+				E654EAD31B6B288A00B0F2D0 /* AirStashSDLGLView.m in Sources */,
+				E654EAC61B6B287E00B0F2D0 /* sdl_timer.c in Sources */,
+				E69BE5531B93FED300AFBA3F /* async.c in Sources */,
+				E654EAB41B6B285900B0F2D0 /* player.c in Sources */,
+				E654EAAE1B6B284C00B0F2D0 /* AirStashFFOptions.m in Sources */,
+				554867991C3F0F0000D64B24 /* AirStashVideoToolBox.m in Sources */,
+				E654EACE1B6B288A00B0F2D0 /* AirStashSDLAudioUnitController.m in Sources */,
+				E654EAAB1B6B284C00B0F2D0 /* AirStashFFMoviePlayerController.m in Sources */,
+				E654EAA41B6B283700B0F2D0 /* AirStashMediaModule.m in Sources */,
+				E654EAAF1B6B285900B0F2D0 /* ff_cmdutils.c in Sources */,
+				E654EABE1B6B287400B0F2D0 /* image_convert.c in Sources */,
+				5548679A1C3F0F0000D64B24 /* ffpipeline_ios.c in Sources */,
+				E654EAA81B6B283D00B0F2D0 /* AirStashAVPlayerLayerView.m in Sources */,
+				E68B7AC61C1E7F20001DE241 /* AirStashSDLHudViewController.m in Sources */,
+				E654EACA1B6B288A00B0F2D0 /* sdl_vout_ios_gles2.m in Sources */,
+				E654EABA1B6B286B00B0F2D0 /* ffpipeline_ffplay.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E654EA9D1B6B27E600B0F2D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					../build/universal/include,
+					AirStashMediaPlayer/media,
+					../../media,
+				);
+				INFOPLIST_FILE = AirStashMediaFramework/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../build/universal/lib\"",
+				);
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.airstash.player;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E654EA9E1B6B27E600B0F2D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					../build/universal/include,
+					AirStashMediaPlayer/media,
+					../../media,
+				);
+				INFOPLIST_FILE = AirStashMediaFramework/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../build/universal/lib\"",
+				);
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.airstash.player;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		E6903EC517EAF6C500CFD954 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Debug;
+		};
+		E6903EC617EAF6C500CFD954 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E654EAA11B6B27E600B0F2D0 /* Build configuration list for PBXNativeTarget "AirStashMediaFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E654EA9D1B6B27E600B0F2D0 /* Debug */,
+				E654EA9E1B6B27E600B0F2D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E6903EB417EAF6C500CFD954 /* Build configuration list for PBXProject "AirStashMediaPlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6903EC517EAF6C500CFD954 /* Debug */,
+				E6903EC617EAF6C500CFD954 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E6903EB117EAF6C500CFD954 /* Project object */;
+}

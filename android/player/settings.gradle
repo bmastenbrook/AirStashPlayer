@@ -1,0 +1,10 @@
+include ':player-armv5', ':player-x86_64'
+include ':player-armv7a'
+include ':player-arm64'
+include ':player-x86'
+
+include ':player-java'
+include ':player-exo'
+
+include ':player-sample'
+
