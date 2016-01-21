@@ -28,16 +28,16 @@ mkdir jartemp
 cd jartemp
 mkdir lib
 cd lib
-mkdir arm64-v8a
+#mkdir arm64-v8a
 mkdir armeabi
 mkdir armeabi-v7a
 mkdir x86
-mkdir x86_64
-cp -f ./../../player/player-arm64/src/main/libs/arm64-v8a/*.so ./arm64-v8a/
+#mkdir x86_64
+#cp -f ./../../player/player-arm64/src/main/libs/arm64-v8a/*.so ./arm64-v8a/
 cp -f ./../../player/player-armv5/src/main/libs/armeabi/*.so ./armeabi/
 cp -f ./../../player/player-armv7a/src/main/libs/armeabi-v7a/*.so ./armeabi-v7a/
 cp -f ./../../player/player-x86/src/main/libs/x86/*.so ./x86/
-cp -f ./../../player/player-x86_64/src/main/libs/x86_64/*.so ./x86_64/
+#cp -f ./../../player/player-x86_64/src/main/libs/x86_64/*.so ./x86_64/
 cd ..
 zip -r -X AirStashPlayer.jar .
 if [ -z "$1" ]
