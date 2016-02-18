@@ -170,6 +170,24 @@ export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-filters"
 export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-iconv"
 # ...
 
+# Dolby Removal
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-encoder=ac3_fixed"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-encoder=ac3"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-decoder=ac3*"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-decoder=eac3*"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-demuxer=ac3"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-demuxer=eac3"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-demuxer=dts"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-muxer=ac3"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-muxer=eac3"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-muxer=dts"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-parser=ac3"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-decoder=mlp"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-demuxer=mlp"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-muxer=mlp"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-parser=mlp"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-demuxer=dtshd"
+
 # Advanced options (experts only):
 # export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --cross-prefix=${FF_CROSS_PREFIX}-"
 # export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-cross-compile"
