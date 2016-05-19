@@ -70,8 +70,8 @@
  /Users/dave/Development/Tools/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/include/strings.h \
  /Users/dave/Development/Tools/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/include/memory.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/attributes.h \
- /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/version.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/macros.h \
+ /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/version.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/avconfig.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/mem.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/error.h \
@@ -80,7 +80,6 @@
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/intfloat.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/log.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/pixfmt.h \
- /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/old_pix_fmts.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/pixdesc.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/pixfmt.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/frame.h \
@@ -100,7 +99,6 @@
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/rational.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavcodec/version.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/version.h \
- /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavcodec/old_codec_ids.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libswscale/swscale.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libswscale/version.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/player/player-x86_64/src/main/jni/media/sdl/android/../ffmpeg/../sdl_inc_internal.h \
@@ -271,9 +269,9 @@
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/attributes.h:
 
-/Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/version.h:
-
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/macros.h:
+
+/Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/version.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/avconfig.h:
 
@@ -290,8 +288,6 @@
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/log.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/pixfmt.h:
-
-/Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/old_pix_fmts.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/pixdesc.h:
 
@@ -330,8 +326,6 @@
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavcodec/version.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavutil/version.h:
-
-/Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libavcodec/old_codec_ids.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-x86_64/output/include/libswscale/swscale.h:
 

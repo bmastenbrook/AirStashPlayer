@@ -23,6 +23,7 @@
 #include "libavutil/parseutils.h"
 #include "libavutil/opt.h"
 #include "libavutil/time.h"
+#include "libavutil/application.h"
 
 #include "internal.h"
 #include "network.h"
@@ -39,6 +40,10 @@ typedef struct TCPContext {
     int open_timeout;
     int rw_timeout;
     int listen_timeout;
+    int recv_buffer_size;
+    int send_buffer_size;
+    int64_t app_ctx_intptr;
+    AVApplicationContext *app_ctx;
 } TCPContext;
 
 #define OFFSET(x) offsetof(TCPContext, x)
@@ -48,6 +53,9 @@ static const AVOption options[] = {
     { "listen",          "Listen for incoming connections",  OFFSET(listen),         AV_OPT_TYPE_INT, { .i64 = 0 },     0,       2,       .flags = D|E },
     { "timeout",     "set timeout (in microseconds) of socket I/O operations", OFFSET(rw_timeout),     AV_OPT_TYPE_INT, { .i64 = -1 },         -1, INT_MAX, .flags = D|E },
     { "listen_timeout",  "Connection awaiting timeout (in milliseconds)",      OFFSET(listen_timeout), AV_OPT_TYPE_INT, { .i64 = -1 },         -1, INT_MAX, .flags = D|E },
+    { "send_buffer_size", "Socket send buffer size (in bytes)",                OFFSET(send_buffer_size), AV_OPT_TYPE_INT, { .i64 = -1 },         -1, INT_MAX, .flags = D|E },
+    { "recv_buffer_size", "Socket receive buffer size (in bytes)",             OFFSET(recv_buffer_size), AV_OPT_TYPE_INT, { .i64 = -1 },         -1, INT_MAX, .flags = D|E },
+    { "ijkapplication",   "AVApplicationContext",                              OFFSET(app_ctx_intptr),   AV_OPT_TYPE_INT64, { .i64 = 0 }, INT64_MIN, INT64_MAX, .flags = D },
     { NULL }
 };
 
@@ -70,6 +78,7 @@ static int tcp_open(URLContext *h, const char *uri, int flags)
     char hostname[1024],proto[1024],path[1024];
     char portstr[10];
     s->open_timeout = 5000000;
+    s->app_ctx = (AVApplicationContext *)(intptr_t)s->app_ctx_intptr;
 
     av_url_split(proto, sizeof(proto), NULL, 0, hostname, sizeof(hostname),
         &port, path, sizeof(path), uri);
@@ -132,24 +141,35 @@ static int tcp_open(URLContext *h, const char *uri, int flags)
             goto fail1;
     } else if (s->listen == 1) {
         // single client
-        if ((fd = ff_listen_bind(fd, cur_ai->ai_addr, cur_ai->ai_addrlen,
-                                 s->listen_timeout, h)) < 0) {
-            ret = fd;
+        if ((ret = ff_listen_bind(fd, cur_ai->ai_addr, cur_ai->ai_addrlen,
+                                  s->listen_timeout, h)) < 0)
             goto fail1;
-        }
+        // Socket descriptor already closed here. Safe to overwrite to client one.
+        fd = ret;
     } else {
         if ((ret = ff_listen_connect(fd, cur_ai->ai_addr, cur_ai->ai_addrlen,
                                      s->open_timeout / 1000, h, !!cur_ai->ai_next)) < 0) {
-
+            av_application_did_tcp_connect_fd(s->app_ctx, ret, fd);
             if (ret == AVERROR_EXIT)
                 goto fail1;
             else
                 goto fail;
+        } else {
+            av_application_did_tcp_connect_fd(s->app_ctx, 0, fd);   
         }
     }
 
     h->is_streamed = 1;
     s->fd = fd;
+    /* Set the socket's send or receive buffer sizes, if specified.
+       If unspecified or setting fails, system default is used. */
+    if (s->recv_buffer_size > 0) {
+        setsockopt (fd, SOL_SOCKET, SO_RCVBUF, &s->recv_buffer_size, sizeof (s->recv_buffer_size));
+    }
+    if (s->send_buffer_size > 0) {
+        setsockopt (fd, SOL_SOCKET, SO_SNDBUF, &s->send_buffer_size, sizeof (s->send_buffer_size));
+    }
+
     freeaddrinfo(ai);
     return 0;
 
@@ -196,6 +216,8 @@ static int tcp_read(URLContext *h, uint8_t *buf, int size)
             return ret;
     }
     ret = recv(s->fd, buf, size, 0);
+    if (ret > 0)
+        av_application_did_io_tcp_read(s->app_ctx, (void*)h, ret);
     return ret < 0 ? ff_neterrno() : ret;
 }
 

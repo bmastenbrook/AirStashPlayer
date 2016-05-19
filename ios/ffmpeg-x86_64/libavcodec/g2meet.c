@@ -631,6 +631,8 @@ static int epic_decode_run_length(ePICContext *dc, int x, int y, int tile_width,
               (NN  != N)  << 1 |
               (NNW != NW);
         WWneW = ff_els_decode_bit(&dc->els_ctx, &dc->W_ctx_rung[idx]);
+        if (WWneW < 0)
+            return WWneW;
     }
 
     if (WWneW)
@@ -837,10 +839,13 @@ static int epic_decode_tile(ePICContext *dc, uint8_t *out, int tile_height,
                 if (y < 2 || x < 2 || x == tile_width - 1) {
                     run       = 1;
                     got_pixel = epic_handle_edges(dc, x, y, curr_row, above_row, &pix);
-                } else
+                } else {
                     got_pixel = epic_decode_run_length(dc, x, y, tile_width,
                                                        curr_row, above_row,
                                                        above2_row, &pix, &run);
+                    if (got_pixel < 0)
+                        return got_pixel;
+                }
 
                 if (!got_pixel && !epic_predict_from_NW_NE(dc, x, y, run,
                                                            tile_width, curr_row,
@@ -1423,8 +1428,7 @@ static int g2m_decode_frame(AVCodecContext *avctx, void *data,
             }
             c->width  = bytestream2_get_be32(&bc);
             c->height = bytestream2_get_be32(&bc);
-            if (c->width  < 16 || c->width  > c->orig_width ||
-                c->height < 16 || c->height > c->orig_height) {
+            if (c->width < 16 || c->height < 16) {
                 av_log(avctx, AV_LOG_ERROR,
                        "Invalid frame dimensions %dx%d\n",
                        c->width, c->height);

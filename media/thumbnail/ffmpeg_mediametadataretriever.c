@@ -32,6 +32,7 @@
 #include "libavutil/common.h"
 #include "libavutil/pixdesc.h"
 #include "libavutil/imgutils.h"
+#include "libavutil/pixfmt.h"
 //#include "libavutil/colorspace.h"
 #include <ffmpeg_mediametadataretriever.h>
 #include <ffmpeg_utils.h>
@@ -43,7 +44,7 @@
 
 #define LOG_TAG "AirStashMetadataRetriever"
 
-const int TARGET_IMAGE_FORMAT = PIX_FMT_YUVJ420P;
+const int TARGET_IMAGE_FORMAT = AV_PIX_FMT_YUVJ420P;
 const int TARGET_IMAGE_CODEC = AV_CODEC_ID_MJPEG;
 
 void convert_image(AVCodecContext *pCodecCtx, AVFrame *pFrame, AVPacket *avpkt, int *got_packet_ptr, int width, int height);

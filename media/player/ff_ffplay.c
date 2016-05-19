@@ -181,16 +181,12 @@ static int packet_queue_put(PacketQueue *q, AVPacket *pkt)
 {
     int ret;
 
-    /* duplicate the packet */
-    if (pkt != &flush_pkt && av_dup_packet(pkt) < 0)
-        return -1;
-
     SDL_LockMutex(q->mutex);
     ret = packet_queue_put_private(q, pkt);
     SDL_UnlockMutex(q->mutex);
 
     if (pkt != &flush_pkt && ret < 0)
-        av_free_packet(pkt);
+        av_packet_unref(pkt);
 
     return ret;
 }
@@ -230,7 +226,7 @@ static void packet_queue_flush(PacketQueue *q)
     SDL_LockMutex(q->mutex);
     for (pkt = q->first_pkt; pkt; pkt = pkt1) {
         pkt1 = pkt->next;
-        av_free_packet(&pkt->pkt);
+        av_packet_unref(&pkt->pkt);
 #ifdef FFP_MERGE
         av_freep(&pkt);
 #else
@@ -392,7 +388,7 @@ static int decoder_decode_frame(FFPlayer *ffp, Decoder *d, AVFrame *frame, AVSub
                     d->next_pts_tb = d->start_pts_tb;
                 }
             } while (pkt.data == flush_pkt.data || d->queue->serial != d->pkt_serial);
-            av_free_packet(&d->pkt);
+            av_packet_unref(&d->pkt);
             d->pkt_temp = d->pkt = pkt;
             d->packet_pending = 1;
         }
@@ -458,7 +454,7 @@ static int decoder_decode_frame(FFPlayer *ffp, Decoder *d, AVFrame *frame, AVSub
 }
 
 static void decoder_destroy(Decoder *d) {
-    av_free_packet(&d->pkt);
+    av_packet_unref(&d->pkt);
 }
 
 static void frame_queue_unref_item(Frame *vp)
@@ -1270,8 +1266,8 @@ static int queue_picture(FFPlayer *ffp, AVFrame *src_frame, double pts, double d
 #ifdef FFP_MERGE
 #if CONFIG_AVFILTER
         // FIXME use direct rendering
-        av_picture_copy(&pict, (AVPicture *)src_frame,
-                        src_frame->format, vp->width, vp->height);
+        av_image_copy(data, linesize, (const uint8_t **)src_frame->data, src_frame->linesize,
+                      src_frame->format, vp->width, vp->height);
 #else
         // sws_getCachedContext(...);
 #endif
@@ -2907,7 +2903,7 @@ static int read_thread(void *arg)
             packet_queue_put(&is->subtitleq, pkt);
 #endif
         } else {
-            av_free_packet(pkt);
+            av_packet_unref(pkt);
         }
 
         ffp_statistic_l(ffp);

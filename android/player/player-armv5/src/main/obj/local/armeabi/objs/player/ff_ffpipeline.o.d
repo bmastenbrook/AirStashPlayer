@@ -71,8 +71,8 @@
  /Users/dave/Development/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/alloca.h \
  /Users/dave/Development/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/strings.h \
  /Users/dave/Development/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/memory.h \
- /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/version.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/macros.h \
+ /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/version.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/avconfig.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/mem.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/error.h \
@@ -81,7 +81,6 @@
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/intfloat.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/log.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/pixfmt.h \
- /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/old_pix_fmts.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/mathematics.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/pixdesc.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/imgutils.h \
@@ -107,7 +106,6 @@
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/rational.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavcodec/version.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/version.h \
- /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavcodec/old_codec_ids.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavformat/avio.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/common.h \
  /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavformat/version.h \
@@ -287,9 +285,9 @@
 
 /Users/dave/Development/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/memory.h:
 
-/Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/version.h:
-
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/macros.h:
+
+/Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/version.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/avconfig.h:
 
@@ -306,8 +304,6 @@
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/log.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/pixfmt.h:
-
-/Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/old_pix_fmts.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/mathematics.h:
 
@@ -358,8 +354,6 @@
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavcodec/version.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavutil/version.h:
-
-/Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavcodec/old_codec_ids.h:
 
 /Users/dave/Development/Wearable/Android/AirStashPlayer/android/contrib/build/ffmpeg-armv5/output/include/libavformat/avio.h:
 

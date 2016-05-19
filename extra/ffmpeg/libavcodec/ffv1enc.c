@@ -370,10 +370,10 @@ static av_always_inline int encode_line(FFV1Context *s, int w,
 }
 
 static int encode_plane(FFV1Context *s, uint8_t *src, int w, int h,
-                         int stride, int plane_index)
+                         int stride, int plane_index, int pixel_stride)
 {
     int x, y, i, ret;
-    const int ring_size = s->avctx->context_model ? 3 : 2;
+    const int ring_size = s->context_model ? 3 : 2;
     int16_t *sample[3];
     s->run_index = 0;
 
@@ -388,7 +388,7 @@ static int encode_plane(FFV1Context *s, uint8_t *src, int w, int h,
 // { START_TIMER
         if (s->bits_per_raw_sample <= 8) {
             for (x = 0; x < w; x++)
-                sample[0][x] = src[x + stride * y];
+                sample[0][x] = src[x * pixel_stride + stride * y];
             if((ret = encode_line(s, w, sample, plane_index, 8)) < 0)
                 return ret;
         } else {
@@ -413,7 +413,7 @@ static int encode_rgb_frame(FFV1Context *s, const uint8_t *src[3],
                              int w, int h, const int stride[3])
 {
     int x, y, p, i;
-    const int ring_size = s->avctx->context_model ? 3 : 2;
+    const int ring_size = s->context_model ? 3 : 2;
     int16_t *sample[4][3];
     int lbd    = s->bits_per_raw_sample <= 8;
     int bits   = s->bits_per_raw_sample > 0 ? s->bits_per_raw_sample : 8;
@@ -535,7 +535,7 @@ static void write_header(FFV1Context *f)
                        0);
             for (j = 0; j < f->plane_count; j++) {
                 put_symbol(c, state, f->plane[j].quant_table_index, 0);
-                av_assert0(f->plane[j].quant_table_index == f->avctx->context_model);
+                av_assert0(f->plane[j].quant_table_index == f->context_model);
             }
         }
     }
@@ -758,6 +758,7 @@ FF_ENABLE_DEPRECATION_WARNINGS
         }
         s->version = FFMAX(s->version, 1);
     case AV_PIX_FMT_GRAY8:
+    case AV_PIX_FMT_YA8:
     case AV_PIX_FMT_YUV444P:
     case AV_PIX_FMT_YUV440P:
     case AV_PIX_FMT_YUV422P:
@@ -769,7 +770,7 @@ FF_ENABLE_DEPRECATION_WARNINGS
     case AV_PIX_FMT_YUVA420P:
         s->chroma_planes = desc->nb_components < 3 ? 0 : 1;
         s->colorspace = 0;
-        s->transparency = desc->nb_components == 4;
+        s->transparency = desc->nb_components == 4 || desc->nb_components == 2;
         if (!avctx->bits_per_raw_sample && !s->bits_per_raw_sample)
             s->bits_per_raw_sample = 8;
         else if (!s->bits_per_raw_sample)
@@ -820,10 +821,16 @@ FF_ENABLE_DEPRECATION_WARNINGS
     if (s->transparency) {
         av_log(avctx, AV_LOG_WARNING, "Storing alpha plane, this will require a recent FFV1 decoder to playback!\n");
     }
+#if FF_API_PRIVATE_OPT
+FF_DISABLE_DEPRECATION_WARNINGS
+    if (avctx->context_model)
+        s->context_model = avctx->context_model;
     if (avctx->context_model > 1U) {
         av_log(avctx, AV_LOG_ERROR, "Invalid context model %d, valid values are 0 and 1\n", avctx->context_model);
         return AVERROR(EINVAL);
     }
+FF_ENABLE_DEPRECATION_WARNINGS
+#endif
 
     if (s->ac == AC_RANGE_CUSTOM_TAB) {
         for (i = 1; i < 256; i++)
@@ -859,14 +866,14 @@ FF_ENABLE_DEPRECATION_WARNINGS
     }
     s->context_count[0] = (11 * 11 * 11        + 1) / 2;
     s->context_count[1] = (11 * 11 * 5 * 5 * 5 + 1) / 2;
-    memcpy(s->quant_table, s->quant_tables[avctx->context_model],
+    memcpy(s->quant_table, s->quant_tables[s->context_model],
            sizeof(s->quant_table));
 
     for (i = 0; i < s->plane_count; i++) {
         PlaneContext *const p = &s->plane[i];
 
         memcpy(p->quant_table, s->quant_table, sizeof(p->quant_table));
-        p->quant_table_index = avctx->context_model;
+        p->quant_table_index = s->context_model;
         p->context_count     = s->context_count[p->quant_table_index];
     }
 
@@ -1033,7 +1040,7 @@ static void encode_slice_header(FFV1Context *f, FFV1Context *fs)
     put_symbol(c, state, (fs->slice_height+1)*f->num_v_slices / f->height-1, 0);
     for (j=0; j<f->plane_count; j++) {
         put_symbol(c, state, f->plane[j].quant_table_index, 0);
-        av_assert0(f->plane[j].quant_table_index == f->avctx->context_model);
+        av_assert0(f->plane[j].quant_table_index == f->context_model);
     }
     if (!f->picture.f->interlaced_frame)
         put_symbol(c, state, 3, 0);
@@ -1174,20 +1181,23 @@ retry:
                       fs->c.bytestream_end - fs->c.bytestream_start - fs->ac_byte_count);
     }
 
-    if (f->colorspace == 0) {
-        const int chroma_width  = FF_CEIL_RSHIFT(width,  f->chroma_h_shift);
-        const int chroma_height = FF_CEIL_RSHIFT(height, f->chroma_v_shift);
+    if (f->colorspace == 0 && c->pix_fmt != AV_PIX_FMT_YA8) {
+        const int chroma_width  = AV_CEIL_RSHIFT(width,  f->chroma_h_shift);
+        const int chroma_height = AV_CEIL_RSHIFT(height, f->chroma_v_shift);
         const int cx            = x >> f->chroma_h_shift;
         const int cy            = y >> f->chroma_v_shift;
 
-        ret = encode_plane(fs, p->data[0] + ps*x + y*p->linesize[0], width, height, p->linesize[0], 0);
+        ret = encode_plane(fs, p->data[0] + ps*x + y*p->linesize[0], width, height, p->linesize[0], 0, 1);
 
         if (f->chroma_planes) {
-            ret |= encode_plane(fs, p->data[1] + ps*cx+cy*p->linesize[1], chroma_width, chroma_height, p->linesize[1], 1);
-            ret |= encode_plane(fs, p->data[2] + ps*cx+cy*p->linesize[2], chroma_width, chroma_height, p->linesize[2], 1);
+            ret |= encode_plane(fs, p->data[1] + ps*cx+cy*p->linesize[1], chroma_width, chroma_height, p->linesize[1], 1, 1);
+            ret |= encode_plane(fs, p->data[2] + ps*cx+cy*p->linesize[2], chroma_width, chroma_height, p->linesize[2], 1, 1);
         }
         if (fs->transparency)
-            ret |= encode_plane(fs, p->data[3] + ps*x + y*p->linesize[3], width, height, p->linesize[3], 2);
+            ret |= encode_plane(fs, p->data[3] + ps*x + y*p->linesize[3], width, height, p->linesize[3], 2, 1);
+    } else if (c->pix_fmt == AV_PIX_FMT_YA8) {
+        ret  = encode_plane(fs, p->data[0] +     ps*x + y*p->linesize[0], width, height, p->linesize[0], 0, 2);
+        ret |= encode_plane(fs, p->data[0] + 1 + ps*x + y*p->linesize[0], width, height, p->linesize[0], 1, 2);
     } else {
         ret = encode_rgb_frame(fs, planes, width, height, p->linesize);
     }
@@ -1377,6 +1387,8 @@ static const AVOption options[] = {
             { .i64 = AC_RANGE_CUSTOM_TAB }, INT_MIN, INT_MAX, VE, "coder" },
         { "ac", "Range with custom table (the ac option exists for compatibility and is deprecated)", 0, AV_OPT_TYPE_CONST,
             { .i64 = 1 }, INT_MIN, INT_MAX, VE, "coder" },
+    { "context", "Context model", OFFSET(context_model), AV_OPT_TYPE_INT,
+            { .i64 = 0 }, 0, 1, VE },
 
     { NULL }
 };
@@ -1416,6 +1428,7 @@ AVCodec ff_ffv1_encoder = {
         AV_PIX_FMT_YUVA444P9, AV_PIX_FMT_YUVA422P9, AV_PIX_FMT_YUVA420P9,
         AV_PIX_FMT_GRAY16,    AV_PIX_FMT_GRAY8,     AV_PIX_FMT_GBRP9,     AV_PIX_FMT_GBRP10,
         AV_PIX_FMT_GBRP12,    AV_PIX_FMT_GBRP14,
+        AV_PIX_FMT_YA8,
         AV_PIX_FMT_NONE
 
     },

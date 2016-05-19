@@ -251,11 +251,11 @@ static int alloc_picture(H264Context *h, H264Picture *pic)
         av_pix_fmt_get_chroma_sub_sample(pic->f->format,
                                          &h_chroma_shift, &v_chroma_shift);
 
-        for(i=0; i<FF_CEIL_RSHIFT(pic->f->height, v_chroma_shift); i++) {
+        for(i=0; i<AV_CEIL_RSHIFT(pic->f->height, v_chroma_shift); i++) {
             memset(pic->f->data[1] + pic->f->linesize[1]*i,
-                   0x80, FF_CEIL_RSHIFT(pic->f->width, h_chroma_shift));
+                   0x80, AV_CEIL_RSHIFT(pic->f->width, h_chroma_shift));
             memset(pic->f->data[2] + pic->f->linesize[2]*i,
-                   0x80, FF_CEIL_RSHIFT(pic->f->width, h_chroma_shift));
+                   0x80, AV_CEIL_RSHIFT(pic->f->width, h_chroma_shift));
         }
     }
 
@@ -781,7 +781,7 @@ static void implicit_weight_table(const H264Context *h, H264SliceContext *sl, in
             cur_poc = h->cur_pic_ptr->field_poc[h->picture_structure - 1];
         }
         if (sl->ref_count[0] == 1 && sl->ref_count[1] == 1 && !FRAME_MBAFF(h) &&
-            sl->ref_list[0][0].poc + sl->ref_list[1][0].poc == 2 * cur_poc) {
+            sl->ref_list[0][0].poc + (int64_t)sl->ref_list[1][0].poc == 2 * cur_poc) {
             sl->use_weight        = 0;
             sl->use_weight_chroma = 0;
             return;
@@ -802,7 +802,7 @@ static void implicit_weight_table(const H264Context *h, H264SliceContext *sl, in
     sl->chroma_log2_weight_denom = 5;
 
     for (ref0 = ref_start; ref0 < ref_count0; ref0++) {
-        int poc0 = sl->ref_list[0][ref0].poc;
+        int64_t poc0 = sl->ref_list[0][ref0].poc;
         for (ref1 = ref_start; ref1 < ref_count1; ref1++) {
             int w = 32;
             if (!sl->ref_list[0][ref0].parent->long_ref && !sl->ref_list[1][ref1].parent->long_ref) {
@@ -1212,6 +1212,9 @@ int ff_h264_decode_slice_header(H264Context *h, H264SliceContext *sl)
         }
     }
 
+    if (!h->current_slice)
+        av_assert0(sl == h->slice_ctx);
+
     slice_type = get_ue_golomb_31(&sl->gb);
     if (slice_type > 9) {
         av_log(h->avctx, AV_LOG_ERROR,
@@ -1279,9 +1282,13 @@ int ff_h264_decode_slice_header(H264Context *h, H264SliceContext *sl)
 
     if (first_slice) {
         h->pps = *h->pps_buffers[pps_id];
-    } else if (h->setup_finished && h->dequant_coeff_pps != pps_id) {
-        av_log(h->avctx, AV_LOG_ERROR, "PPS changed between slices\n");
-        return AVERROR_INVALIDDATA;
+    } else {
+        if (h->pps.sps_id != pps->sps_id ||
+            h->pps.transform_8x8_mode != pps->transform_8x8_mode ||
+            (h->setup_finished && h->dequant_coeff_pps != pps_id)) {
+            av_log(h->avctx, AV_LOG_ERROR, "PPS changed between slices\n");
+            return AVERROR_INVALIDDATA;
+        }
     }
 
     if (pps->sps_id != h->sps.sps_id ||
@@ -1419,7 +1426,7 @@ int ff_h264_decode_slice_header(H264Context *h, H264SliceContext *sl)
         }
     }
 
-    if (first_slice && h->dequant_coeff_pps != pps_id) {
+    if (!h->current_slice && h->dequant_coeff_pps != pps_id) {
         h->dequant_coeff_pps = pps_id;
         ff_h264_init_dequant_tables(h);
     }
@@ -1477,7 +1484,6 @@ int ff_h264_decode_slice_header(H264Context *h, H264SliceContext *sl)
         }
     }
 
-    h->picture_structure = picture_structure;
     if (!h->setup_finished) {
         h->droppable         = droppable;
         h->picture_structure = picture_structure;
@@ -1688,7 +1694,7 @@ int ff_h264_decode_slice_header(H264Context *h, H264SliceContext *sl)
     }
 
     if (h->nal_unit_type == NAL_IDR_SLICE)
-        get_ue_golomb(&sl->gb); /* idr_pic_id */
+        get_ue_golomb_long(&sl->gb); /* idr_pic_id */
 
     if (h->sps.poc_type == 0) {
         int poc_lsb = get_bits(&sl->gb, h->sps.log2_max_poc_lsb);
@@ -2043,7 +2049,6 @@ static av_always_inline void fill_filter_caches_inter(const H264Context *h,
 }
 
 /**
- *
  * @return non zero if the loop filter can be skipped
  */
 static int fill_filter_caches(const H264Context *h, H264SliceContext *sl, int mb_type)

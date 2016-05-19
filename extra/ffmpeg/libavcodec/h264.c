@@ -46,10 +46,13 @@
 #include "mathops.h"
 #include "me_cmp.h"
 #include "mpegutils.h"
+#include "profiles.h"
 #include "rectangle.h"
 #include "svq3.h"
 #include "thread.h"
 #include "vdpau_compat.h"
+
+static int h264_decode_end(AVCodecContext *avctx);
 
 const uint16_t ff_h264_mb_sizes[4] = { 256, 384, 512, 768 };
 
@@ -678,7 +681,7 @@ av_cold int ff_h264_decode_init(AVCodecContext *avctx)
     if (avctx->extradata_size > 0 && avctx->extradata) {
         ret = ff_h264_decode_extradata(h, avctx->extradata, avctx->extradata_size);
         if (ret < 0) {
-            ff_h264_free_context(h);
+            h264_decode_end(avctx);
             return ret;
         }
     }
@@ -932,7 +935,7 @@ static void decode_postinit(H264Context *h, int setup_finished)
         h->last_pocs[0] = cur->poc;
         cur->mmco_reset = 1;
     } else if(h->avctx->has_b_frames < out_of_order && !h->sps.bitstream_restriction_flag){
-        av_log(h->avctx, AV_LOG_VERBOSE, "Increasing reorder buffer to %d\n", out_of_order);
+        av_log(h->avctx, AV_LOG_INFO, "Increasing reorder buffer to %d\n", out_of_order);
         h->avctx->has_b_frames = out_of_order;
         h->low_delay = 0;
     }
@@ -1365,7 +1368,7 @@ static int get_last_needed_nal(H264Context *h, const uint8_t *buf, int buf_size)
         case NAL_IDR_SLICE:
         case NAL_SLICE:
             init_get_bits(&gb, ptr, bit_length);
-            if (!get_ue_golomb(&gb) ||
+            if (!get_ue_golomb_long(&gb) ||  // first_mb_in_slice
                 !first_slice ||
                 first_slice != h->nal_unit_type)
                 nals_needed = nal_index;
@@ -1675,6 +1678,47 @@ again:
 
     ret = 0;
 end:
+
+#if CONFIG_ERROR_RESILIENCE
+    sl = h->slice_ctx;
+    /*
+     * FIXME: Error handling code does not seem to support interlaced
+     * when slices span multiple rows
+     * The ff_er_add_slice calls don't work right for bottom
+     * fields; they cause massive erroneous error concealing
+     * Error marking covers both fields (top and bottom).
+     * This causes a mismatched s->error_count
+     * and a bad error table. Further, the error count goes to
+     * INT_MAX when called for bottom field, because mb_y is
+     * past end by one (callers fault) and resync_mb_y != 0
+     * causes problems for the first MB line, too.
+     */
+    if (!FIELD_PICTURE(h) && h->current_slice && !h->sps.new && h->enable_er) {
+        int use_last_pic = h->last_pic_for_ec.f->buf[0] && !sl->ref_count[0];
+
+        ff_h264_set_erpic(&sl->er.cur_pic, h->cur_pic_ptr);
+
+        if (use_last_pic) {
+            ff_h264_set_erpic(&sl->er.last_pic, &h->last_pic_for_ec);
+            sl->ref_list[0][0].parent = &h->last_pic_for_ec;
+            memcpy(sl->ref_list[0][0].data, h->last_pic_for_ec.f->data, sizeof(sl->ref_list[0][0].data));
+            memcpy(sl->ref_list[0][0].linesize, h->last_pic_for_ec.f->linesize, sizeof(sl->ref_list[0][0].linesize));
+            sl->ref_list[0][0].reference = h->last_pic_for_ec.reference;
+        } else if (sl->ref_count[0]) {
+            ff_h264_set_erpic(&sl->er.last_pic, sl->ref_list[0][0].parent);
+        } else
+            ff_h264_set_erpic(&sl->er.last_pic, NULL);
+
+        if (sl->ref_count[1])
+            ff_h264_set_erpic(&sl->er.next_pic, sl->ref_list[1][0].parent);
+
+        sl->er.ref_count = sl->ref_count[0];
+
+        ff_er_frame_end(&sl->er);
+        if (use_last_pic)
+            memset(&sl->ref_list[0][0], 0, sizeof(sl->ref_list[0][0]));
+    }
+#endif /* CONFIG_ERROR_RESILIENCE */
     /* clean up */
     if (h->cur_pic_ptr && !h->droppable) {
         ff_thread_report_progress(&h->cur_pic_ptr->tf, INT_MAX,
@@ -1737,7 +1781,7 @@ static int is_extra(const uint8_t *buf, int buf_size)
     const uint8_t *p= buf+6;
     while(cnt--){
         int nalsize= AV_RB16(p) + 2;
-        if(nalsize > buf_size - (p-buf) || p[2]!=0x67)
+        if(nalsize > buf_size - (p-buf) || (p[2] & 0x9F) != 7)
             return 0;
         p += nalsize;
     }
@@ -1746,7 +1790,7 @@ static int is_extra(const uint8_t *buf, int buf_size)
         return 0;
     while(cnt--){
         int nalsize= AV_RB16(p) + 2;
-        if(nalsize > buf_size - (p-buf) || p[2]!=0x68)
+        if(nalsize > buf_size - (p-buf) || (p[2] & 0x9F) != 8)
             return 0;
         p += nalsize;
     }
@@ -1924,6 +1968,9 @@ av_cold void ff_h264_free_context(H264Context *h)
     av_freep(&h->slice_ctx);
     h->nb_slice_ctx = 0;
 
+    h->a53_caption_size = 0;
+    av_freep(&h->a53_caption);
+
     for (i = 0; i < MAX_SPS_COUNT; i++)
         av_freep(h->sps_buffers + i);
 
@@ -1962,23 +2009,6 @@ static const AVClass h264_class = {
     .version    = LIBAVUTIL_VERSION_INT,
 };
 
-static const AVProfile profiles[] = {
-    { FF_PROFILE_H264_BASELINE,             "Baseline"              },
-    { FF_PROFILE_H264_CONSTRAINED_BASELINE, "Constrained Baseline"  },
-    { FF_PROFILE_H264_MAIN,                 "Main"                  },
-    { FF_PROFILE_H264_EXTENDED,             "Extended"              },
-    { FF_PROFILE_H264_HIGH,                 "High"                  },
-    { FF_PROFILE_H264_HIGH_10,              "High 10"               },
-    { FF_PROFILE_H264_HIGH_10_INTRA,        "High 10 Intra"         },
-    { FF_PROFILE_H264_HIGH_422,             "High 4:2:2"            },
-    { FF_PROFILE_H264_HIGH_422_INTRA,       "High 4:2:2 Intra"      },
-    { FF_PROFILE_H264_HIGH_444,             "High 4:4:4"            },
-    { FF_PROFILE_H264_HIGH_444_PREDICTIVE,  "High 4:4:4 Predictive" },
-    { FF_PROFILE_H264_HIGH_444_INTRA,       "High 4:4:4 Intra"      },
-    { FF_PROFILE_H264_CAVLC_444,            "CAVLC 4:4:4"           },
-    { FF_PROFILE_UNKNOWN },
-};
-
 AVCodec ff_h264_decoder = {
     .name                  = "h264",
     .long_name             = NULL_IF_CONFIG_SMALL("H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10"),
@@ -1995,7 +2025,7 @@ AVCodec ff_h264_decoder = {
     .flush                 = flush_dpb,
     .init_thread_copy      = ONLY_IF_THREADS_ENABLED(decode_init_thread_copy),
     .update_thread_context = ONLY_IF_THREADS_ENABLED(ff_h264_update_thread_context),
-    .profiles              = NULL_IF_CONFIG_SMALL(profiles),
+    .profiles              = NULL_IF_CONFIG_SMALL(ff_h264_profiles),
     .priv_class            = &h264_class,
 };
 
@@ -2020,7 +2050,7 @@ AVCodec ff_h264_vdpau_decoder = {
     .flush          = flush_dpb,
     .pix_fmts       = (const enum AVPixelFormat[]) { AV_PIX_FMT_VDPAU_H264,
                                                      AV_PIX_FMT_NONE},
-    .profiles       = NULL_IF_CONFIG_SMALL(profiles),
+    .profiles       = NULL_IF_CONFIG_SMALL(ff_h264_profiles),
     .priv_class     = &h264_vdpau_class,
 };
 #endif

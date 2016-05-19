@@ -243,6 +243,8 @@ static int rtp_new_av_stream(HTTPContext *c,
                              int stream_index, struct sockaddr_in *dest_addr,
                              HTTPContext *rtsp_c);
 /* utils */
+static size_t htmlencode (const char *src, char **dest);
+static inline void cp_html_entity (char *buffer, const char *entity);
 static inline int check_codec_match(AVCodecContext *ccf, AVCodecContext *ccs,
                                     int stream);
 
@@ -263,12 +265,79 @@ static AVLFG random_state;
 
 static FILE *logfile = NULL;
 
-static void htmlstrip(char *s) {
-    while (s && *s) {
-        s += strspn(s, "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. ");
-        if (*s)
-            *s++ = '?';
+static inline void cp_html_entity (char *buffer, const char *entity) {
+    if (!buffer || !entity)
+        return;
+    while (*entity)
+        *buffer++ = *entity++;
+}
+
+/**
+ * Substitutes known conflicting chars on a text string with
+ * their corresponding HTML entities.
+ *
+ * Returns the number of bytes in the 'encoded' representation
+ * not including the terminating NUL.
+ */
+static size_t htmlencode (const char *src, char **dest) {
+    const char *amp = "&amp;";
+    const char *lt  = "&lt;";
+    const char *gt  = "&gt;";
+    const char *start;
+    char *tmp;
+    size_t final_size = 0;
+
+    if (!src)
+        return 0;
+
+    start = src;
+
+    /* Compute needed dest size */
+    while (*src != '\0') {
+        switch(*src) {
+            case 38: /* & */
+                final_size += 5;
+                break;
+            case 60: /* < */
+            case 62: /* > */
+                final_size += 4;
+                break;
+            default:
+                final_size++;
+        }
+        src++;
     }
+
+    src = start;
+    *dest = av_mallocz(final_size + 1);
+    if (!*dest)
+        return 0;
+
+    /* Build dest */
+    tmp = *dest;
+    while (*src != '\0') {
+        switch(*src) {
+            case 38: /* & */
+                cp_html_entity (tmp, amp);
+                tmp += 5;
+                break;
+            case 60: /* < */
+                cp_html_entity (tmp, lt);
+                tmp += 4;
+                break;
+            case 62: /* > */
+                cp_html_entity (tmp, gt);
+                tmp += 4;
+                break;
+            default:
+                *tmp = *src;
+                tmp += 1;
+        }
+        src++;
+    }
+    *tmp = '\0';
+
+    return final_size;
 }
 
 static int64_t ffm_read_write_index(int fd)
@@ -304,8 +373,8 @@ static void ffm_set_write_index(AVFormatContext *s, int64_t pos,
                                 int64_t file_size)
 {
     av_opt_set_int(s, "server_attached", 1, AV_OPT_SEARCH_CHILDREN);
-    av_opt_set_int(s, "write_index", pos, AV_OPT_SEARCH_CHILDREN);
-    av_opt_set_int(s, "file_size", file_size, AV_OPT_SEARCH_CHILDREN);
+    av_opt_set_int(s, "ffm_write_index", pos, AV_OPT_SEARCH_CHILDREN);
+    av_opt_set_int(s, "ffm_file_size", file_size, AV_OPT_SEARCH_CHILDREN);
 }
 
 static char *ctime1(char *buf2, size_t buf_size)
@@ -749,6 +818,7 @@ static void http_send_too_busy_reply(int fd)
                        "HTTP/1.0 503 Server too busy\r\n"
                        "Content-type: text/html\r\n"
                        "\r\n"
+                       "<!DOCTYPE html>\n"
                        "<html><head><title>Too busy</title></head><body>\r\n"
                        "<p>The server is too busy to serve your request at "
                        "this time.</p>\r\n"
@@ -1356,6 +1426,7 @@ static int http_parse_request(HTTPContext *c)
     char url[1024], *q;
     char protocol[32];
     char msg[1024];
+    char *encoded_msg = NULL;
     const char *mime_type;
     FFServerStream *stream;
     int i;
@@ -1457,6 +1528,7 @@ static int http_parse_request(HTTPContext *c)
                       "Location: %s\r\n"
                       "Content-type: text/html\r\n"
                       "\r\n"
+                      "<!DOCTYPE html>\n"
                       "<html><head><title>Moved</title></head><body>\r\n"
                       "You should be <a href=\"%s\">redirected</a>.\r\n"
                       "</body></html>\r\n",
@@ -1496,6 +1568,7 @@ static int http_parse_request(HTTPContext *c)
                       "HTTP/1.0 503 Server too busy\r\n"
                       "Content-type: text/html\r\n"
                       "\r\n"
+                      "<!DOCTYPE html>\n"
                       "<html><head><title>Too busy</title></head><body>\r\n"
                       "<p>The server is too busy to serve your request at "
                       "this time.</p>\r\n"
@@ -1753,20 +1826,27 @@ static int http_parse_request(HTTPContext *c)
  send_error:
     c->http_error = 404;
     q = c->buffer;
-    htmlstrip(msg);
+    if (!htmlencode(msg, &encoded_msg)) {
+        http_log("Could not encode filename '%s' as HTML\n", msg);
+    }
     snprintf(q, c->buffer_size,
                   "HTTP/1.0 404 Not Found\r\n"
                   "Content-type: text/html\r\n"
                   "\r\n"
+                  "<!DOCTYPE html>\n"
                   "<html>\n"
-                  "<head><title>404 Not Found</title></head>\n"
+                  "<head>\n"
+                  "<meta charset=\"UTF-8\">\n"
+                  "<title>404 Not Found</title>\n"
+                  "</head>\n"
                   "<body>%s</body>\n"
-                  "</html>\n", msg);
+                  "</html>\n", encoded_msg? encoded_msg : "File not found");
     q += strlen(q);
     /* prepare output buffer */
     c->buffer_ptr = c->buffer;
     c->buffer_end = q;
     c->state = HTTPSTATE_SEND_HEADER;
+    av_freep(&encoded_msg);
     return 0;
  send_status:
     compute_status(c);
@@ -1854,6 +1934,7 @@ static void compute_status(HTTPContext *c)
     avio_printf(pb, "Pragma: no-cache\r\n");
     avio_printf(pb, "\r\n");
 
+    avio_printf(pb, "<!DOCTYPE html>\n");
     avio_printf(pb, "<html><head><title>%s Status</title>\n", program_name);
     if (c->stream->feed_filename[0])
         avio_printf(pb, "<link rel=\"shortcut icon\" href=\"%s\">\n",
@@ -2541,6 +2622,7 @@ static int http_start_receive_data(HTTPContext *c)
 {
     int fd;
     int ret;
+    int64_t ret64;
 
     if (c->stream->feed_opened) {
         http_log("Stream feed '%s' was not opened\n",
@@ -2576,13 +2658,13 @@ static int http_start_receive_data(HTTPContext *c)
             return ret;
         }
     } else {
-        ret = ffm_read_write_index(fd);
-        if (ret < 0) {
+        ret64 = ffm_read_write_index(fd);
+        if (ret64 < 0) {
             http_log("Error reading write index from feed file '%s': %s\n",
                      c->stream->feed_filename, strerror(errno));
-            return ret;
+            return ret64;
         }
-        c->stream->feed_write_index = ret;
+        c->stream->feed_write_index = ret64;
     }
 
     c->stream->feed_write_index = FFMAX(ffm_read_write_index(fd),
@@ -2914,6 +2996,8 @@ static int prepare_sdp_description(FFServerStream *stream, uint8_t **pbuffer,
     for(i = 0; i < stream->nb_streams; i++) {
         avc->streams[i] = &avs[i];
         avc->streams[i]->codec = stream->streams[i]->codec;
+        avcodec_parameters_from_context(stream->streams[i]->codecpar, stream->streams[i]->codec);
+        avc->streams[i]->codecpar = stream->streams[i]->codecpar;
     }
     *pbuffer = av_mallocz(2048);
     if (!*pbuffer)
@@ -3454,6 +3538,8 @@ static AVStream *add_av_stream1(FFServerStream *stream,
 
     fst->priv_data = av_mallocz(sizeof(FeedData));
     fst->internal = av_mallocz(sizeof(*fst->internal));
+    fst->internal->avctx = avcodec_alloc_context3(NULL);
+    fst->codecpar = avcodec_parameters_alloc();
     fst->index = stream->nb_streams;
     avpriv_set_pts_info(fst, 33, 1, 90000);
     fst->sample_aspect_ratio = codec->sample_aspect_ratio;
@@ -3853,7 +3939,7 @@ static void handle_child_exit(int sig)
             fprintf(stderr,
                     "%s: Pid %"PRId64" exited with status %d after %"PRId64" "
                         "seconds\n",
-                    feed->filename, (int64_t) pid, status, uptime);
+                    feed->filename, (int64_t) pid, status, (int64_t)uptime);
 
             if (uptime < 30)
                 /* Turn off any more restarts */

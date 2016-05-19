@@ -29,7 +29,10 @@
 #include <netcdf.h>
 
 #include "libavcodec/avfft.h"
+#include "libavutil/avstring.h"
+#include "libavutil/channel_layout.h"
 #include "libavutil/float_dsp.h"
+#include "libavutil/intmath.h"
 #include "libavutil/opt.h"
 #include "avfilter.h"
 #include "internal.h"
@@ -51,6 +54,12 @@ typedef struct NCSofa {  /* contains data of one SOFA file */
     float *data_ir;      /* IRs (time-domain) */
 } NCSofa;
 
+typedef struct VirtualSpeaker {
+    uint8_t set;
+    float azim;
+    float elev;
+} VirtualSpeaker;
+
 typedef struct SOFAlizerContext {
     const AVClass *class;
 
@@ -60,6 +69,7 @@ typedef struct SOFAlizerContext {
     int sample_rate;            /* sample rate from SOFA file */
     float *speaker_azim;        /* azimuth of the virtual loudspeakers */
     float *speaker_elev;        /* elevation of the virtual loudspeakers */
+    char *speakers_pos;         /* custom positions of the virtual loudspeakers */
     float gain_lfe;             /* gain applied to LFE channel */
     int lfe_channel;            /* LFE channel position in channel layout */
 
@@ -87,6 +97,8 @@ typedef struct SOFAlizerContext {
     float elevation;     /* elevation of virtual loudspeakers (in deg.) */
     float radius;        /* distance virtual loudspeakers to listener (in metres) */
     int type;            /* processing type */
+
+    VirtualSpeaker vspkrpos[64];
 
     FFTContext *fft[2], *ifft[2];
     FFTComplex *data_hrtf[2];
@@ -268,7 +280,7 @@ static int load_sofa(AVFilterContext *ctx, char *filename, int *samplingrate)
     sp_r = s->sofa.sp_r = av_malloc_array(m_dim, sizeof(float));
     /* delay and IR values required for each ear and measurement position: */
     data_delay = s->sofa.data_delay = av_calloc(m_dim, 2 * sizeof(int));
-    data_ir = s->sofa.data_ir = av_malloc_array(m_dim * n_samples, sizeof(float) * 2);
+    data_ir = s->sofa.data_ir = av_calloc(m_dim * FFALIGN(n_samples, 16), sizeof(float) * 2);
 
     if (!data_delay || !sp_a || !sp_e || !sp_r || !data_ir) {
         /* if memory could not be allocated */
@@ -315,6 +327,7 @@ static int load_sofa(AVFilterContext *ctx, char *filename, int *samplingrate)
     if (!strncmp(data_delay_dim_name, "I", 2)) {
         /* check 2 characters to assure string is 0-terminated after "I" */
         int delay[2]; /* delays get from SOFA file: */
+        int *data_delay_r;
 
         av_log(ctx, AV_LOG_DEBUG, "Data.Delay has dimension [I R]\n");
         status = nc_get_var_int(ncid, data_delay_id, &delay[0]);
@@ -323,7 +336,7 @@ static int load_sofa(AVFilterContext *ctx, char *filename, int *samplingrate)
             ret = AVERROR(EINVAL);
             goto error;
         }
-        int *data_delay_r = data_delay + m_dim;
+        data_delay_r = data_delay + m_dim;
         for (i = 0; i < m_dim; i++) { /* extend given dimension [I R] to [M R] */
             /* assign constant delay value for all measurements to data_delay fields */
             data_delay[i]   = delay[0];
@@ -351,6 +364,8 @@ static int load_sofa(AVFilterContext *ctx, char *filename, int *samplingrate)
     s->sofa.ncid = ncid; /* netCDF ID of SOFA file */
     nc_close(ncid); /* close SOFA file */
 
+    av_log(ctx, AV_LOG_DEBUG, "m_dim: %d n_samples %d\n", m_dim, n_samples);
+
     return 0;
 
 error:
@@ -358,160 +373,128 @@ error:
     return ret;
 }
 
+static int parse_channel_name(char **arg, int *rchannel)
+{
+    char buf[8];
+    int len, i, channel_id = 0;
+    int64_t layout, layout0;
+
+    /* try to parse a channel name, e.g. "FL" */
+    if (sscanf(*arg, "%7[A-Z]%n", buf, &len)) {
+        layout0 = layout = av_get_channel_layout(buf);
+        /* channel_id <- first set bit in layout */
+        for (i = 32; i > 0; i >>= 1) {
+            if (layout >= (int64_t)1 << i) {
+                channel_id += i;
+                layout >>= i;
+            }
+        }
+        /* reject layouts that are not a single channel */
+        if (channel_id >= 64 || layout0 != (int64_t)1 << channel_id)
+            return AVERROR(EINVAL);
+        *rchannel = channel_id;
+        *arg += len;
+        return 0;
+    }
+    return AVERROR(EINVAL);
+}
+
+static void parse_speaker_pos(AVFilterContext *ctx, int64_t in_channel_layout)
+{
+    SOFAlizerContext *s = ctx->priv;
+    char *arg, *tokenizer, *p, *args = av_strdup(s->speakers_pos);
+
+    if (!args)
+        return;
+    p = args;
+
+    while ((arg = av_strtok(p, "|", &tokenizer))) {
+        float azim, elev;
+        int out_ch_id;
+
+        p = NULL;
+        if (parse_channel_name(&arg, &out_ch_id))
+            continue;
+        if (sscanf(arg, "%f %f", &azim, &elev) == 2) {
+            s->vspkrpos[out_ch_id].set = 1;
+            s->vspkrpos[out_ch_id].azim = azim;
+            s->vspkrpos[out_ch_id].elev = elev;
+        } else if (sscanf(arg, "%f", &azim) == 1) {
+            s->vspkrpos[out_ch_id].set = 1;
+            s->vspkrpos[out_ch_id].azim = azim;
+            s->vspkrpos[out_ch_id].elev = 0;
+        }
+    }
+
+    av_free(args);
+}
+
 static int get_speaker_pos(AVFilterContext *ctx,
                            float *speaker_azim, float *speaker_elev)
 {
     struct SOFAlizerContext *s = ctx->priv;
     uint64_t channels_layout = ctx->inputs[0]->channel_layout;
-    float azim[10] = { 0 };
-    float elev[10] = { 0 };
-    int n_conv = ctx->inputs[0]->channels; /* get no. input channels */
+    float azim[16] = { 0 };
+    float elev[16] = { 0 };
+    int m, ch, n_conv = ctx->inputs[0]->channels; /* get no. input channels */
+
+    if (n_conv > 16)
+        return AVERROR(EINVAL);
 
     s->lfe_channel = -1;
 
+    if (s->speakers_pos)
+        parse_speaker_pos(ctx, channels_layout);
+
     /* set speaker positions according to input channel configuration: */
-    switch (channels_layout) {
-    case AV_CH_LAYOUT_MONO:
-                            azim[0] = 0;
-                            break;
-    case AV_CH_LAYOUT_2POINT1:
-                            s->lfe_channel = 2;
-    case AV_CH_LAYOUT_STEREO:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            break;
-    case AV_CH_LAYOUT_3POINT1:
-                            s->lfe_channel = 3;
-    case AV_CH_LAYOUT_SURROUND:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            break;
-    case AV_CH_LAYOUT_2_1:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 180;
-                            break;
-    case AV_CH_LAYOUT_2_2:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 90;
-                            azim[3] = 270;
-                            break;
-    case AV_CH_LAYOUT_QUAD:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 120;
-                            azim[3] = 240;
-                            break;
-    case AV_CH_LAYOUT_4POINT1:
-                            s->lfe_channel = 3;
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[4] = 180;
-                            break;
-    case AV_CH_LAYOUT_4POINT0:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[3] = 180;
-                            break;
-    case AV_CH_LAYOUT_5POINT1:
-                            s->lfe_channel = 3;
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[4] = 90;
-                            azim[5] = 270;
-                            break;
-    case AV_CH_LAYOUT_5POINT0:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[3] = 90;
-                            azim[4] = 270;
-                            break;
-    case AV_CH_LAYOUT_5POINT1_BACK:
-                            s->lfe_channel = 3;
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[4] = 120;
-                            azim[5] = 240;
-                            break;
-    case AV_CH_LAYOUT_5POINT0_BACK:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[3] = 120;
-                            azim[4] = 240;
-                            break;
-    case AV_CH_LAYOUT_6POINT1:
-                            s->lfe_channel = 3;
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[4] = 180;
-                            azim[5] = 90;
-                            azim[6] = 270;
-                            break;
-    case AV_CH_LAYOUT_6POINT0:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[3] = 180;
-                            azim[4] = 90;
-                            azim[5] = 270;
-                            break;
-    case AV_CH_LAYOUT_6POINT1_BACK:
-                            s->lfe_channel = 3;
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[4] = 120;
-                            azim[5] = 240;
-                            azim[6] = 180;
-                            break;
-    case AV_CH_LAYOUT_HEXAGONAL:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[3] = 120;
-                            azim[4] = 240;
-                            azim[5] = 180;
-                            break;
-    case AV_CH_LAYOUT_7POINT1:
-                            s->lfe_channel = 3;
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[4] = 150;
-                            azim[5] = 210;
-                            azim[6] = 90;
-                            azim[7] = 270;
-                            break;
-    case AV_CH_LAYOUT_7POINT0:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[3] = 150;
-                            azim[4] = 210;
-                            azim[5] = 90;
-                            azim[6] = 270;
-                            break;
-    case AV_CH_LAYOUT_OCTAGONAL:
-                            azim[0] = 30;
-                            azim[1] = 330;
-                            azim[2] = 0;
-                            azim[3] = 150;
-                            azim[4] = 210;
-                            azim[5] = 180;
-                            azim[6] = 90;
-                            azim[7] = 270;
-                            break;
-    default:
-                            return -1;
+    for (m = 0, ch = 0; ch < n_conv && m < 64; m++) {
+        uint64_t mask = channels_layout & (1 << m);
+
+        switch (mask) {
+        case AV_CH_FRONT_LEFT:            azim[ch] =  30;      break;
+        case AV_CH_FRONT_RIGHT:           azim[ch] = 330;      break;
+        case AV_CH_FRONT_CENTER:          azim[ch] =   0;      break;
+        case AV_CH_LOW_FREQUENCY:
+        case AV_CH_LOW_FREQUENCY_2:       s->lfe_channel = ch; break;
+        case AV_CH_BACK_LEFT:             azim[ch] = 150;      break;
+        case AV_CH_BACK_RIGHT:            azim[ch] = 210;      break;
+        case AV_CH_BACK_CENTER:           azim[ch] = 180;      break;
+        case AV_CH_SIDE_LEFT:             azim[ch] =  90;      break;
+        case AV_CH_SIDE_RIGHT:            azim[ch] = 270;      break;
+        case AV_CH_FRONT_LEFT_OF_CENTER:  azim[ch] =  15;      break;
+        case AV_CH_FRONT_RIGHT_OF_CENTER: azim[ch] = 345;      break;
+        case AV_CH_TOP_CENTER:            azim[ch] =   0;
+                                          elev[ch] =  90;      break;
+        case AV_CH_TOP_FRONT_LEFT:        azim[ch] =  30;
+                                          elev[ch] =  45;      break;
+        case AV_CH_TOP_FRONT_CENTER:      azim[ch] =   0;
+                                          elev[ch] =  45;      break;
+        case AV_CH_TOP_FRONT_RIGHT:       azim[ch] = 330;
+                                          elev[ch] =  45;      break;
+        case AV_CH_TOP_BACK_LEFT:         azim[ch] = 150;
+                                          elev[ch] =  45;      break;
+        case AV_CH_TOP_BACK_RIGHT:        azim[ch] = 210;
+                                          elev[ch] =  45;      break;
+        case AV_CH_TOP_BACK_CENTER:       azim[ch] = 180;
+                                          elev[ch] =  45;      break;
+        case AV_CH_WIDE_LEFT:             azim[ch] =  90;      break;
+        case AV_CH_WIDE_RIGHT:            azim[ch] = 270;      break;
+        case AV_CH_SURROUND_DIRECT_LEFT:  azim[ch] =  90;      break;
+        case AV_CH_SURROUND_DIRECT_RIGHT: azim[ch] = 270;      break;
+        case AV_CH_STEREO_LEFT:           azim[ch] =  90;      break;
+        case AV_CH_STEREO_RIGHT:          azim[ch] = 270;      break;
+        case 0:                                                break;
+        default:
+            return AVERROR(EINVAL);
+        }
+
+        if (s->vspkrpos[m].set) {
+            azim[ch] = s->vspkrpos[m].azim;
+            elev[ch] = s->vspkrpos[m].elev;
+        }
+
+        if (mask)
+            ch++;
     }
 
     memcpy(speaker_azim, azim, n_conv * sizeof(float));
@@ -584,8 +567,15 @@ static int compensate_volume(AVFilterContext *ctx)
         av_log(ctx, AV_LOG_DEBUG, "Compensate-factor: %f\n", compensate);
         ir = sofa->data_ir;
         /* apply volume compensation to IRs */
-        s->fdsp->vector_fmul_scalar(ir, ir, compensate, sofa->n_samples * sofa->m_dim * 2);
-        emms_c();
+        if (sofa->n_samples & 31) {
+            int i;
+            for (i = 0; i < sofa->n_samples * sofa->m_dim * 2; i++) {
+                ir[i] = ir[i] * compensate;
+            }
+        } else {
+            s->fdsp->vector_fmul_scalar(ir, ir, compensate, sofa->n_samples * sofa->m_dim * 2);
+            emms_c();
+        }
     }
 
     return 0;
@@ -622,7 +612,7 @@ static int sofalizer_convolute(AVFilterContext *ctx, void *arg, int jobnr, int n
     const int buffer_length = s->buffer_length;
     /* -1 for AND instead of MODULO (applied to powers of 2): */
     const uint32_t modulo = (uint32_t)buffer_length - 1;
-    float *buffer[10]; /* holds ringbuffer for each input channel */
+    float *buffer[16]; /* holds ringbuffer for each input channel */
     int wr = *write;
     int read;
     int i, l;
@@ -650,7 +640,7 @@ static int sofalizer_convolute(AVFilterContext *ctx, void *arg, int jobnr, int n
                 /* LFE is an input channel but requires no convolution */
                 /* apply gain to LFE signal and add to output buffer */
                 *dst += *(buffer[s->lfe_channel] + wr) * s->gain_lfe;
-                temp_ir += n_samples;
+                temp_ir += FFALIGN(n_samples, 16);
                 continue;
             }
 
@@ -670,7 +660,7 @@ static int sofalizer_convolute(AVFilterContext *ctx, void *arg, int jobnr, int n
 
             /* multiply signal and IR, and add up the results */
             dst[0] += s->fdsp->scalarproduct_float(temp_ir, temp_src, n_samples);
-            temp_ir += n_samples;
+            temp_ir += FFALIGN(n_samples, 16);
         }
 
         /* clippings counter */
@@ -846,28 +836,6 @@ static int query_formats(AVFilterContext *ctx)
     AVFilterFormats *formats = NULL;
     AVFilterChannelLayouts *layouts = NULL;
     int ret, sample_rates[] = { 48000, -1 };
-    static const uint64_t channel_layouts[] = { AV_CH_LAYOUT_MONO,
-                                                AV_CH_LAYOUT_STEREO,
-                                                AV_CH_LAYOUT_2POINT1,
-                                                AV_CH_LAYOUT_SURROUND,
-                                                AV_CH_LAYOUT_2_1,
-                                                AV_CH_LAYOUT_4POINT0,
-                                                AV_CH_LAYOUT_QUAD,
-                                                AV_CH_LAYOUT_2_2,
-                                                AV_CH_LAYOUT_3POINT1,
-                                                AV_CH_LAYOUT_5POINT0_BACK,
-                                                AV_CH_LAYOUT_5POINT0,
-                                                AV_CH_LAYOUT_4POINT1,
-                                                AV_CH_LAYOUT_5POINT1_BACK,
-                                                AV_CH_LAYOUT_5POINT1,
-                                                AV_CH_LAYOUT_6POINT0,
-                                                AV_CH_LAYOUT_HEXAGONAL,
-                                                AV_CH_LAYOUT_6POINT1,
-                                                AV_CH_LAYOUT_6POINT1_BACK,
-                                                AV_CH_LAYOUT_7POINT0,
-                                                AV_CH_LAYOUT_7POINT1,
-                                                AV_CH_LAYOUT_OCTAGONAL,
-                                                0, };
 
     ret = ff_add_format(&formats, AV_SAMPLE_FMT_FLT);
     if (ret)
@@ -876,7 +844,7 @@ static int query_formats(AVFilterContext *ctx)
     if (ret)
         return ret;
 
-    layouts = ff_make_formatu64_list(channel_layouts);
+    layouts = ff_all_channel_layouts();
     if (!layouts)
         return AVERROR(ENOMEM);
 
@@ -906,8 +874,8 @@ static int load_data(AVFilterContext *ctx, int azim, int elev, float radius)
     const int n_samples = s->sofa.n_samples;
     int n_conv = s->n_conv; /* no. channels to convolve */
     int n_fft = s->n_fft;
-    int delay_l[10]; /* broadband delay for each IR */
-    int delay_r[10];
+    int delay_l[16]; /* broadband delay for each IR */
+    int delay_r[16];
     int nb_input_channels = ctx->inputs[0]->channels; /* no. input channels */
     float gain_lin = expf((s->gain - 3 * nb_input_channels) / 20 * M_LN10); /* gain - 3dB/channel */
     FFTComplex *data_hrtf_l = NULL;
@@ -917,7 +885,7 @@ static int load_data(AVFilterContext *ctx, int azim, int elev, float radius)
     float *data_ir_l = NULL;
     float *data_ir_r = NULL;
     int offset = 0; /* used for faster pointer arithmetics in for-loop */
-    int m[10]; /* measurement index m of IR closest to required source positions */
+    int m[16]; /* measurement index m of IR closest to required source positions */
     int i, j, azim_orig = azim, elev_orig = elev;
 
     if (!s->sofa.ncid) { /* if an invalid SOFA file has been selected */
@@ -930,8 +898,8 @@ static int load_data(AVFilterContext *ctx, int azim, int elev, float radius)
         s->temp_src[1] = av_calloc(FFALIGN(n_samples, 16), sizeof(float));
 
         /* get temporary IR for L and R channel */
-        data_ir_l = av_malloc_array(n_conv * n_samples, sizeof(*data_ir_l));
-        data_ir_r = av_malloc_array(n_conv * n_samples, sizeof(*data_ir_r));
+        data_ir_l = av_calloc(n_conv * FFALIGN(n_samples, 16), sizeof(*data_ir_l));
+        data_ir_r = av_calloc(n_conv * FFALIGN(n_samples, 16), sizeof(*data_ir_r));
         if (!data_ir_r || !data_ir_l || !s->temp_src[0] || !s->temp_src[1]) {
             av_free(data_ir_l);
             av_free(data_ir_r);
@@ -960,7 +928,7 @@ static int load_data(AVFilterContext *ctx, int azim, int elev, float radius)
         delay_r[i] = *(s->sofa.data_delay + 2 * m[i] + 1);
 
         if (s->type == TIME_DOMAIN) {
-            offset = i * n_samples; /* no. samples already written */
+            offset = i * FFALIGN(n_samples, 16); /* no. samples already written */
             for (j = 0; j < n_samples; j++) {
                 /* load reversed IRs of the specified source position
                  * sample-by-sample for left and right ear; and apply gain */
@@ -1007,8 +975,8 @@ static int load_data(AVFilterContext *ctx, int azim, int elev, float radius)
 
     if (s->type == TIME_DOMAIN) {
         /* copy IRs and delays to allocated memory in the SOFAlizerContext struct: */
-        memcpy(s->data_ir[0], data_ir_l, sizeof(float) * n_conv * n_samples);
-        memcpy(s->data_ir[1], data_ir_r, sizeof(float) * n_conv * n_samples);
+        memcpy(s->data_ir[0], data_ir_l, sizeof(float) * n_conv * FFALIGN(n_samples, 16));
+        memcpy(s->data_ir[1], data_ir_r, sizeof(float) * n_conv * FFALIGN(n_samples, 16));
 
         av_freep(&data_ir_l); /* free temporary IR memory */
         av_freep(&data_ir_r);
@@ -1046,6 +1014,11 @@ static av_cold int init(AVFilterContext *ctx)
     SOFAlizerContext *s = ctx->priv;
     int ret;
 
+    if (!s->filename) {
+        av_log(ctx, AV_LOG_ERROR, "Valid SOFA filename must be set.\n");
+        return AVERROR(EINVAL);
+    }
+
     /* load SOFA file, */
     /* initialize file IDs to 0 before attempting to load SOFA files,
      * this assures that in case of error, only the memory of already
@@ -1069,18 +1042,6 @@ static av_cold int init(AVFilterContext *ctx)
         return AVERROR(ENOMEM);
 
     return 0;
-}
-
-static inline unsigned clz(unsigned x)
-{
-    unsigned i = sizeof(x) * 8;
-
-    while (x) {
-        x >>= 1;
-        i--;
-    }
-
-    return i;
 }
 
 static int config_input(AVFilterLink *inlink)
@@ -1115,8 +1076,8 @@ static int config_input(AVFilterLink *inlink)
     }
     /* buffer length is longest IR plus max. delay -> next power of 2
        (32 - count leading zeros gives required exponent)  */
-    s->buffer_length = exp2(32 - clz((uint32_t)n_max));
-    s->n_fft         = exp2(32 - clz((uint32_t)(n_max + inlink->sample_rate)));
+    s->buffer_length = 1 << (32 - ff_clz(n_max));
+    s->n_fft         = 1 << (32 - ff_clz(n_max + inlink->sample_rate));
 
     if (s->type == FREQUENCY_DOMAIN) {
         av_fft_end(s->fft[0]);
@@ -1129,15 +1090,15 @@ static int config_input(AVFilterLink *inlink)
         s->ifft[1] = av_fft_init(log2(s->n_fft), 1);
 
         if (!s->fft[0] || !s->fft[1] || !s->ifft[0] || !s->ifft[1]) {
-            av_log(ctx, AV_LOG_ERROR, "Unable to create FFT contexts.\n");
+            av_log(ctx, AV_LOG_ERROR, "Unable to create FFT contexts of size %d.\n", s->n_fft);
             return AVERROR(ENOMEM);
         }
     }
 
     /* Allocate memory for the impulse responses, delays and the ringbuffers */
     /* size: (longest IR) * (number of channels to convolute) */
-    s->data_ir[0] = av_malloc_array(n_max_ir, sizeof(float) * s->n_conv);
-    s->data_ir[1] = av_malloc_array(n_max_ir, sizeof(float) * s->n_conv);
+    s->data_ir[0] = av_calloc(FFALIGN(n_max_ir, 16), sizeof(float) * s->n_conv);
+    s->data_ir[1] = av_calloc(FFALIGN(n_max_ir, 16), sizeof(float) * s->n_conv);
     /* length:  number of channels to convolute */
     s->delay[0] = av_malloc_array(s->n_conv, sizeof(float));
     s->delay[1] = av_malloc_array(s->n_conv, sizeof(float));
@@ -1229,6 +1190,7 @@ static const AVOption sofalizer_options[] = {
     { "type",      "set processing", OFFSET(type),      AV_OPT_TYPE_INT,    {.i64=1},       0,   1, .flags = FLAGS, "type" },
     { "time",      "time domain",      0,               AV_OPT_TYPE_CONST,  {.i64=0},       0,   0, .flags = FLAGS, "type" },
     { "freq",      "frequency domain", 0,               AV_OPT_TYPE_CONST,  {.i64=1},       0,   0, .flags = FLAGS, "type" },
+    { "speakers",  "set speaker custom positions", OFFSET(speakers_pos), AV_OPT_TYPE_STRING,  {.str=0},    0, 0, .flags = FLAGS },
     { NULL }
 };
 

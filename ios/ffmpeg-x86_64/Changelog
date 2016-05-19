@@ -1,6 +1,76 @@
 Entries are sorted chronologically from oldest to youngest within each release,
 releases are sorted from youngest to oldest.
 
+version 3.0:
+- Common Encryption (CENC) MP4 encoding and decoding support
+- DXV decoding
+- extrastereo filter
+- ocr filter
+- alimiter filter
+- stereowiden filter
+- stereotools filter
+- rubberband filter
+- tremolo filter
+- agate filter
+- chromakey filter
+- maskedmerge filter
+- Screenpresso SPV1 decoding
+- chromaprint fingerprinting muxer
+- ffplay dynamic volume control
+- displace filter
+- selectivecolor filter
+- extensive native AAC encoder improvements and removal of experimental flag
+- ADPCM PSX decoder
+- 3dostr, dcstr, fsb, genh, vag, xvag, ads, msf, svag & vpk demuxer
+- zscale filter
+- wve demuxer
+- zero-copy Intel QSV transcoding in ffmpeg
+- shuffleframes filter
+- SDX2 DPCM decoder
+- vibrato filter
+- innoHeim/Rsupport Screen Capture Codec decoder
+- ADPCM AICA decoder
+- Interplay ACM demuxer and audio decoder
+- XMA1 & XMA2 decoder
+- realtime filter
+- anoisesrc audio filter source
+- IVR demuxer
+- compensationdelay filter
+- acompressor filter
+- support encoding 16-bit RLE SGI images
+- apulsator filter
+- sidechaingate audio filter
+- mipsdspr1 option has been renamed to mipsdsp
+- aemphasis filter
+- mips32r5 option has been removed
+- mips64r6 option has been removed
+- DXVA2-accelerated VP9 decoding
+- SOFAlizer: virtual binaural acoustics filter
+- VAAPI VP9 hwaccel
+- audio high-order multiband parametric equalizer
+- automatic bitstream filtering
+- showspectrumpic filter
+- libstagefright support removed
+- spectrumsynth filter
+- ahistogram filter
+- only seek with the right mouse button in ffplay
+- toggle full screen when double-clicking with the left mouse button in ffplay
+- afftfilt filter
+- convolution filter
+- libquvi support removed
+- support for dvaudio in wav and avi
+- libaacplus and libvo-aacenc support removed
+- Cineform HD decoder
+- new DCA decoder with full support for DTS-HD extensions
+- significant performance improvements in Windows Television (WTV) demuxer
+- nnedi deinterlacer
+- streamselect video and astreamselect audio filter
+- swaprect filter
+- metadata video and ametadata audio filter
+- SMPTE VC-2 HQ profile support for the Dirac decoder
+- SMPTE VC-2 native encoder supporting the HQ profile
+
+
 version 2.8:
 - colorkey video filter
 - BFSTM/BCSTM demuxer
